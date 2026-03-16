@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pravda / Mýty o Francouzích</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #1d4f91;
+    --blue-light: #e8f0fb;
+    --blue-mid: #3a7bbf;
+    --red: #bf1e2e;
+    --red-light: #fcedef;
+    --red-mid: #e0404f;
+    --white: #fff9f5;
+    --text: #1a1612;
+    --muted: #7a6f67;
+    --correct-bg: #d4edda;
+    --correct: #1a6630;
+    --wrong-bg: #fde8e8;
+    --wrong: #8b1a1a;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Decorative background stripes */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(to right, var(--blue) 33.3%, #fff 33.3%, #fff 66.6%, var(--red) 66.6%);
+    z-index: 100;
+  }
+
+  .bg-deco {
+    position: fixed;
+    top: -120px; right: -80px;
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(29,79,145,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .bg-deco2 {
+    position: fixed;
+    bottom: -100px; left: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(191,30,46,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 700px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .flag-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .flag {
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .flag span { width: 14px; height: 24px; display: block; }
+  .f1 { background: #002395; }
+  .f2 { background: #EDEDED; }
+  .f3 { background: #ED2939; }
+
+  .emoji-deco { font-size: 26px; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  h1 .t-blue { color: var(--blue); }
+  h1 .t-red { color: var(--red); }
+
+  .subtitle {
+    margin-top: 0.6rem;
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: #e8e2dc;
+    border-radius: 99px;
+    height: 6px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(to right, var(--blue), var(--red));
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  /* QUESTION CARDS */
+  .questions { display: flex; flex-direction: column; gap: 14px; }
+
+  .card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid #e5ddd6;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s, transform 0.2s;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-1px); }
+
+  .card.answered-correct {
+    border-color: var(--correct);
+    background: var(--correct-bg);
+  }
+  .card.answered-wrong {
+    border-color: var(--wrong);
+    background: var(--wrong-bg);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .num-badge {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .card.blue-card .num-badge { background: var(--blue); }
+  .card.red-card .num-badge { background: var(--red); }
+
+  .card-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.45;
+    flex: 1;
+  }
+
+  .card-icon { font-size: 22px; flex-shrink: 0; }
+
+  .card-buttons {
+    display: flex;
+    border-top: 1px solid #ede7e0;
+  }
+
+  .btn-choice {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-choice:first-child { border-right: 1px solid #ede7e0; }
+
+  .btn-choice.pravda {
+    color: var(--blue);
+  }
+  .btn-choice.pravda:hover:not(:disabled) {
+    background: var(--blue-light);
+  }
+
+  .btn-choice.mytus {
+    color: var(--red);
+  }
+  .btn-choice.mytus:hover:not(:disabled) {
+    background: var(--red-light);
+  }
+
+  .btn-choice:disabled { cursor: default; opacity: 0.5; }
+
+  .btn-choice.selected-pravda {
+    background: var(--blue);
+    color: #fff;
+    opacity: 1;
+  }
+  .btn-choice.selected-mytus {
+    background: var(--red);
+    color: #fff;
+    opacity: 1;
+  }
+
+  .check-icon { font-size: 16px; }
+
+  /* FEEDBACK */
+  .feedback {
+    padding: 10px 16px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .feedback.show { display: flex; }
+  .feedback.correct { color: var(--correct); }
+  .feedback.wrong { color: var(--wrong); }
+  .feedback-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* SCORE PANEL */
+  .score-panel {
+    margin-top: 2.5rem;
+    background: #fff;
+    border-radius: 16px;
+    border: 1.5px solid #e5ddd6;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    display: none;
+    animation: fadeUp 0.6s ease both;
+  }
+  .score-panel.show { display: block; }
+
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .score-number span { color: var(--muted); font-size: 32px; }
+
+  .score-label {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .score-message {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-reset {
+    padding: 12px 32px;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 99px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .btn-reset:hover { background: var(--blue-mid); transform: scale(1.03); }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation-fill-mode: both; }
+</style>
+</head>
+<body>
+<div class="bg-deco"></div>
+<div class="bg-deco2"></div>
+
+<div class="container">
+  <header>
+    <div class="flag-row">
+      <span class="emoji-deco">🗼</span>
+      <div class="flag"><span class="f1"></span><span class="f2"></span><span class="f3"></span></div>
+      <span class="emoji-deco">🥐</span>
+    </div>
+    <h1><span class="t-blue">Pravda</span> / <span class="t-red">Mýty</span><br>o Francouzích</h1>
+    <p class="subtitle">Označ, jestli je tvrzení <strong style="color:var(--blue)">Pravda</strong> nebo <strong style="color:var(--red)">Mýtus</strong>.</p>
+  </header>
+
+  <div class="progress-label">
+    <span id="prog-text">0 / 10 zodpovězeno</span>
+    <span id="prog-score">Skóre: 0</span>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <div class="questions" id="questions"></div>
+
+  <div class="score-panel" id="score-panel">
+    <div class="score-number" id="final-score">0<span> / 10</span></div>
+    <div class="score-label">správných odpovědí</div>
+    <div class="score-message" id="score-msg"></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Zkusit znovu</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    color: 'blue',
+    text: 'Francouzi jedí bagetu ke každému jídlu.',
+    icon: '🥖',
+    answer: 'mytus',
+    feedback: 'Mýtus! Bageta je sice velmi populární, ale Francouzi ji nejedí ke každému jídlu. Je to spíše romantizovaný obraz Francie.'
+  },
+  {
+    color: 'red',
+    text: 'Ve Francii se opravdu zdraví polibkem na tvář, tzv. „la bise".',
+    icon: '💋',
+    answer: 'pravda',
+    feedback: 'Pravda! „La bise" je skutečný francouzský zvyk – líbání na tvář při pozdravu. Počet polibků se liší podle regionu (2–4).'
+  },
+  {
+    color: 'blue',
+    text: 'Každý Francouz má doma Eiffelovu věž jako suvenýr.',
+    icon: '🗼',
+    answer: 'mytus',
+    feedback: 'Mýtus! Eiffelova věž jako suvenýr je typický turistický artikl, ale rozhodně ne něco, co má každý Francouz doma.'
+  },
+  {
+    color: 'red',
+    text: 'Francouzi pijí hodně vína – i děti v některých rodinách.',
+    icon: '🍷',
+    answer: 'pravda',
+    feedback: 'Pravda! Historicky bylo ve Francii běžné, že děti dostávaly víno naředěné vodou. Dnes je to vzácnější, ale stále se v tradičnějších rodinách vyskytuje.'
+  },
+  {
+    color: 'blue',
+    text: 'Croissant se vynalezl ve Francii.',
+    icon: '🥐',
+    answer: 'mytus',
+    feedback: 'Mýtus! Croissant pochází z Vídně (Rakousko). Do Francie ho přivezla Marie Antoinetta. Původní název byl „Kipferl".'
+  },
+  {
+    color: 'red',
+    text: 'Ve Francii je povinné umět francouzsky.',
+    icon: '🇫🇷',
+    answer: 'mytus',
+    feedback: 'Mýtus! Neexistuje zákon, který by přikazoval umět francouzsky. Nicméně francouzština je úředním jazykem a dominuje ve veřejném životě.'
+  },
+  {
+    color: 'blue',
+    text: 'Francouzi jsou vždy elegantně oblečení.',
+    icon: '🎩',
+    answer: 'mytus',
+    feedback: 'Mýtus! Přestože Francie je módní velmoc, v každodenním životě se Francouzi oblékají pohodlně jako kdokoli jiný. Stereotype „parisienne" je zveličený.'
+  },
+  {
+    color: 'red',
+    text: 'V Paříži se opravdu mluví jen francouzsky, angličtina se nesmí používat.',
+    icon: '🗣️',
+    answer: 'mytus',
+    feedback: 'Mýtus! V Paříži se angličtina používá hojně, zvláště v turistických oblastech. Zákon angličtinu nezakazuje – jde jen o kulturní preferenci.'
+  },
+  {
+    color: 'blue',
+    text: 'Francouzi slaví 14. července Den dobytí Bastily.',
+    icon: '🎆',
+    answer: 'pravda',
+    feedback: 'Pravda! 14. července (Bastille Day) je francouzský státní svátek připomínající dobytí věznice Bastila v roce 1789 – symbol Francouzské revoluce.'
+  },
+  {
+    color: 'red',
+    text: 'Francouzské děti mají povinné domácí úkoly jen jednou týdně.',
+    icon: '📝',
+    answer: 'mytus',
+    feedback: 'Mýtus! Ve Francii jsou domácí úkoly pro žáky základních škol (do 11 let) dokonce officiálně zakázány od roku 1956 – ale v praxi se stále zadávají.'
+  }
+];
+
+let answered = {};
+let score = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('questions');
+  container.innerHTML = '';
+  answered = {};
+  score = 0;
+  updateProgress();
+
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = `card ${q.color}-card`;
+    card.style.animationDelay = `${i * 0.06}s`;
+    card.id = `card-${i}`;
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="num-badge">${i + 1}</div>
+        <div class="card-text">${q.text}</div>
+        <div class="card-icon">${q.icon}</div>
+      </div>
+      <div class="card-buttons">
+        <button class="btn-choice pravda" onclick="answer(${i}, 'pravda')" id="btn-p-${i}">
+          <span class="check-icon">☐</span> Pravda
+        </button>
+        <button class="btn-choice mytus" onclick="answer(${i}, 'mytus')" id="btn-m-${i}">
+          <span class="check-icon">☐</span> Mýtus
+        </button>
+      </div>
+      <div class="feedback" id="fb-${i}">
+        <span class="feedback-icon"></span>
+        <span class="feedback-text"></span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  document.getElementById('score-panel').classList.remove('show');
+}
+
+function answer(index, choice) {
+  if (answered[index] !== undefined) return;
+  answered[index] = choice;
+
+  const q = questions[index];
+  const correct = choice === q.answer;
+  if (correct) score++;
+
+  const card = document.getElementById(`card-${index}`);
+  const btnP = document.getElementById(`btn-p-${index}`);
+  const btnM = document.getElementById(`btn-m-${index}`);
+  const fb = document.getElementById(`fb-${index}`);
+
+  btnP.disabled = true;
+  btnM.disabled = true;
+
+  if (choice === 'pravda') {
+    btnP.classList.add('selected-pravda');
+    btnP.querySelector('.check-icon').textContent = '☑';
+  } else {
+    btnM.classList.add('selected-mytus');
+    btnM.querySelector('.check-icon').textContent = '☑';
+  }
+
+  card.classList.add(correct ? 'answered-correct' : 'answered-wrong');
+
+  fb.className = `feedback show ${correct ? 'correct' : 'wrong'}`;
+  fb.querySelector('.feedback-icon').textContent = correct ? '✅' : '❌';
+  fb.querySelector('.feedback-text').textContent = q.feedback;
+
+  updateProgress();
+
+  if (Object.keys(answered).length === questions.length) {
+    setTimeout(showScore, 700);
+  }
+}
+
+function updateProgress() {
+  const count = Object.keys(answered).length;
+  document.getElementById('prog-text').textContent = `${count} / 10 zodpovězeno`;
+  document.getElementById('prog-score').textContent = `Skóre: ${score}`;
+  document.getElementById('progress-bar').style.width = `${count * 10}%`;
+}
+
+function showScore() {
+  const panel = document.getElementById('score-panel');
+  document.getElementById('final-score').innerHTML = `${score}<span> / 10</span>`;
+
+  const messages = [
+    [0, 3, '😬 Zkus to znovu, Francie tě překvapuje!'],
+    [4, 5, '🥐 Dobrý začátek – víš o Francii něco málo!'],
+    [6, 7, '🗼 Slušný výsledek! Francie ti není cizí.'],
+    [8, 9, '🍷 Výborně! Jsi skoro expert na Francii!'],
+    [10, 10, '🥇 Parfait! Víš o Francouzích úplně vše!'],
+  ];
+
+  let msg = '';
+  for (const [min, max, text] of messages) {
+    if (score >= min && score <= max) { msg = text; break; }
+  }
+  document.getElementById('score-msg').textContent = msg;
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  buildQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>

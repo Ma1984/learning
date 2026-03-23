@@ -40,6 +40,12 @@ const QUESTIONS = [
   { question: "They ___ a new movie right now.", options: ["watch", "are watching", "watchify"], correctIndex: 1 },
 ];
 
+QUESTIONS.forEach(q => {
+  const correctOption = q.options[q.correctIndex];
+  q.options = q.options.sort(() => Math.random() - 0.5);
+  q.correctIndex = q.options.indexOf(correctOption);
+});
+
 const FUNNY_NAMES = [
   "🧠 Brainy Banana",
   "🦄 Unicorn Teacher",
@@ -216,7 +222,7 @@ function selectCell(index) {
 
   document.getElementById('popupContent').innerHTML = `
     <p class="mb-3 font-bold text-lg">❓ ${q.question}</p>
-    ${shuffleArray(q.options).map((opt, i) => `
+    ${q.options.map((opt, i) => `
       <button onclick="answer(${i})" class="block w-full text-left border p-3 my-2 rounded-lg hover:bg-yellow-100">
         ${opt}
       </button>

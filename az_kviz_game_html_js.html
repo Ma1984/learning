@@ -216,7 +216,7 @@ function selectCell(index) {
 
   document.getElementById('popupContent').innerHTML = `
     <p class="mb-3 font-bold text-lg">❓ ${q.question}</p>
-    ${q.options.map((opt, i) => `
+    ${shuffleArray(q.options).map((opt, i) => `
       <button onclick="answer(${i})" class="block w-full text-left border p-3 my-2 rounded-lg hover:bg-yellow-100">
         ${opt}
       </button>

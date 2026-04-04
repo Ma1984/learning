@@ -1,337 +1,329 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>🔥 Grammar Clash 🔥</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-</head>
-<body class="bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-400 min-h-screen text-white">
+<meta charset="UTF-8">
+<title>Grammar Clash</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;flex-direction:column;font-family:system-ui,sans-serif;transition:background .3s,color .3s}
+body.theme-fire{background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);color:#fff}
+body.theme-ocean{background:linear-gradient(135deg,#0f172a,#0369a1,#0ea5e9);color:#fff}
+body.theme-slate{background:#1e293b;color:#e2e8f0}
+body.theme-mono{background:#f8f8f8;color:#111}
 
-<div id="app"></div>
+#toolbar{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 24px;backdrop-filter:blur(12px)}
+body.theme-fire #toolbar{background:rgba(0,0,0,.35)}
+body.theme-ocean #toolbar{background:rgba(0,0,0,.45)}
+body.theme-slate #toolbar{background:rgba(0,0,0,.5);border-top:1px solid rgba(255,255,255,.08)}
+body.theme-mono #toolbar{background:rgba(220,220,220,.85);border-top:1px solid #ccc}
+
+.tb-btn{border:none;cursor:pointer;border-radius:12px;font-size:16px;font-weight:700;padding:11px 22px;transition:opacity .15s,transform .1s}
+.tb-btn:hover{opacity:.85;transform:scale(1.04)}
+.tb-restart{background:#ef4444;color:#fff}
+body.theme-mono .tb-restart{background:#222;color:#fff}
+.tb-theme{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:border-color .15s,transform .1s;flex-shrink:0}
+.tb-theme:hover{transform:scale(1.15)}
+.tb-theme.active{border-color:#fff}
+body.theme-mono .tb-theme.active{border-color:#333}
+.tb-sep{width:1px;height:30px;background:rgba(255,255,255,.25);flex-shrink:0}
+body.theme-mono .tb-sep{background:#bbb}
+.tb-label{font-size:14px;font-weight:600;opacity:.8;user-select:none}
+.swatch-fire{background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b)}
+.swatch-ocean{background:linear-gradient(135deg,#0369a1,#0ea5e9)}
+.swatch-slate{background:linear-gradient(135deg,#1e293b,#475569)}
+.swatch-mono{background:linear-gradient(135deg,#d4d4d4,#f8f8f8);border:1px solid #aaa}
+
+#header{width:100%;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px)}
+body.theme-fire #header,body.theme-ocean #header{background:rgba(0,0,0,.35)}
+body.theme-slate #header{background:rgba(0,0,0,.4)}
+body.theme-mono #header{background:rgba(255,255,255,.7);border-bottom:1px solid #ddd;color:#111}
+.player-box{text-align:left}
+.player-box.right{text-align:right}
+.player-name{font-weight:700;font-size:14px}
+body.theme-fire .player-name.p0{color:#fca5a5}
+body.theme-fire .player-name.p1{color:#93c5fd}
+body.theme-ocean .player-name.p0{color:#fca5a5}
+body.theme-ocean .player-name.p1{color:#7dd3fc}
+body.theme-slate .player-name.p0{color:#fca5a5}
+body.theme-slate .player-name.p1{color:#7dd3fc}
+body.theme-mono .player-name.p0{color:#dc2626}
+body.theme-mono .player-name.p1{color:#2563eb}
+.player-stats{font-size:12px;opacity:.8}
+.turn-indicator{font-weight:700;font-size:15px;text-align:center}
+
+#setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-bottom:60px}
+.setup-card{padding:24px 28px;border-radius:18px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:400px}
+body.theme-fire .setup-card,body.theme-ocean .setup-card{background:rgba(255,255,255,.18)}
+body.theme-slate .setup-card{background:rgba(255,255,255,.07)}
+body.theme-mono .setup-card{background:#fff;border:1px solid #ddd;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+h1{font-size:32px;font-weight:900;text-align:center;letter-spacing:-1px}
+
+.name-row{display:flex;gap:8px;align-items:center}
+.setup-input{padding:10px 14px;border-radius:10px;border:none;font-size:15px;outline:none;flex:1;min-width:0}
+body.theme-mono .setup-input{border:1px solid #ccc;background:#fafafa;color:#111}
+body.theme-fire .setup-input,body.theme-ocean .setup-input,body.theme-slate .setup-input{background:rgba(255,255,255,.9);color:#111}
+
+.btn-shuffle{padding:9px 12px;border-radius:10px;border:none;font-size:16px;cursor:pointer;flex-shrink:0;transition:transform .15s,opacity .15s;line-height:1}
+.btn-shuffle:hover{transform:rotate(20deg) scale(1.1);opacity:.85}
+body.theme-fire .btn-shuffle,body.theme-ocean .btn-shuffle,body.theme-slate .btn-shuffle{background:rgba(255,255,255,.25);color:#fff}
+body.theme-mono .btn-shuffle{background:#e5e7eb;color:#333}
+
+.btn-start{padding:12px;border-radius:12px;border:none;font-size:16px;font-weight:800;cursor:pointer;transition:opacity .15s}
+.btn-start:hover{opacity:.88}
+body.theme-fire .btn-start{background:#fbbf24;color:#000}
+body.theme-ocean .btn-start{background:#0284c7;color:#fff}
+body.theme-slate .btn-start{background:#334155;color:#fff}
+body.theme-mono .btn-start{background:#111;color:#fff}
+
+#board-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 8px 70px}
+.board{display:flex;flex-direction:column;gap:6px;align-items:center}
+.board-row{display:flex;gap:6px;justify-content:center}
+.cell{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;cursor:pointer;transition:transform .1s,background .2s;user-select:none;border:none}
+.cell:hover:not(.taken){transform:scale(1.1)}
+.cell.empty{background:rgba(255,255,255,.22);color:rgba(255,255,255,.8)}
+body.theme-mono .cell.empty{background:#e5e7eb;color:#555}
+body.theme-slate .cell.empty{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
+.cell.p0{background:#ef4444;color:#fff}
+.cell.p1{background:#3b82f6;color:#fff}
+body.theme-mono .cell.p0{background:#dc2626}
+body.theme-mono .cell.p1{background:#2563eb}
+.cell.taken{cursor:default}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.popup{background:#fff;color:#111;border-radius:18px;padding:24px;max-width:420px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.popup-q{font-size:17px;font-weight:700;margin-bottom:14px}
+.opt-btn{display:block;width:100%;text-align:left;padding:12px 14px;margin:6px 0;border-radius:10px;border:2px solid #e5e7eb;background:#fff;font-size:15px;cursor:pointer;transition:border-color .15s,background .15s}
+.opt-btn:hover{border-color:#6366f1;background:#f5f3ff}
+.popup-title{font-size:20px;font-weight:800;margin-bottom:6px}
+.popup-sub{font-size:14px;color:#666;margin-bottom:18px}
+.popup-actions{display:flex;gap:10px;margin-top:18px}
+.btn-pop{flex:1;padding:11px;border-radius:11px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-pop:hover{opacity:.85}
+.btn-pop.yes{background:#ef4444;color:#fff}
+.btn-pop.no{background:#e5e7eb;color:#333}
+.win-popup{text-align:center}
+.win-popup h2{font-size:26px;font-weight:900;margin-bottom:8px}
+.win-popup p{font-size:16px;margin-bottom:18px}
+.btn-again{padding:10px 24px;border-radius:12px;border:none;background:#fbbf24;font-size:15px;font-weight:700;cursor:pointer}
+.btn-again:hover{background:#f59e0b}
+</style>
+</head>
+<body class="theme-fire">
+<div id="root" style="display:flex;flex-direction:column;min-height:100vh"></div>
+
+<div id="toolbar">
+  <span class="tb-label">Theme</span>
+  <button class="tb-theme swatch-fire active" data-theme="fire" onclick="setTheme('fire')"></button>
+  <button class="tb-theme swatch-ocean" data-theme="ocean" onclick="setTheme('ocean')"></button>
+  <button class="tb-theme swatch-slate" data-theme="slate" onclick="setTheme('slate')"></button>
+  <button class="tb-theme swatch-mono" data-theme="mono" onclick="setTheme('mono')"></button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn tb-restart" onclick="askRestart()">↺ Restart</button>
+</div>
 
 <script>
-// ================= CONFIG =================
-const QUESTIONS = [
-  { question: "She ___ to school every day.", options: ["goes", "is going", "go"], correctIndex: 0 },
-  { question: "They ___ football right now.", options: ["play", "are playing", "plooting"], correctIndex: 1 },
-  { question: "I usually ___ coffee in the morning.", options: ["drink", "am drinking", "drunkify"], correctIndex: 0 },
-  { question: "He ___ TV at the moment.", options: ["watches", "is watching", "watchify"], correctIndex: 1 },
-  { question: "We ___ dinner now.", options: ["eat", "are eating", "eatoo"], correctIndex: 1 },
-  { question: "She ___ sometimes late for work.", options: ["is coming", "comes", "come"], correctIndex: 1 },
-  { question: "They ___ never watch horror movies.", options: ["do", "are", "does"], correctIndex: 0 },
-  { question: "I ___ right now, can you call me later?", options: ["am talking", "talk", "talks"], correctIndex: 0 },
-  { question: "He often ___ in the morning.", options: ["jogs", "is jogging", "jog"], correctIndex: 0 },
-  { question: "We ___ to the gym on Mondays.", options: ["go", "is going", "goes"], correctIndex: 0 },
-  { question: "You ___ always forget your keys!", options: ["does", "do", "are doing"], correctIndex: 1 },
-  { question: "It ___ a lot in spring.", options: ["rains", "is raining", "rainify"], correctIndex: 0 },
-  { question: "She ___ a book right now.", options: ["reads", "is reading", "readify"], correctIndex: 1 },
-  { question: "Do they ___ breakfast every morning?", options: ["have", "are having", "has"], correctIndex: 0 },
-  { question: "He ___ his homework at the moment.", options: ["is doing", "does", "do"], correctIndex: 0 },
-  { question: "We ___ sometimes in this park.", options: ["play", "are playing", "plays"], correctIndex: 0 },
-  { question: "She ___ never arrive late.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "I ___ usually take a nap after lunch.", options: ["am taking", "take", "takes"], correctIndex: 1 },
-  { question: "They ___ right now.", options: ["are dancing", "dance", "dances"], correctIndex: 0 },
-  { question: "He ___ always forget his bag.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "You ___ sometimes too quickly.", options: ["drive", "drives", "are driving"], correctIndex: 0 },
-  { question: "It ___ snow in winter.", options: ["snows", "is snowing", "snow"], correctIndex: 0 },
-  { question: "Are you ___ a new project?", options: ["working on", "work", "works"], correctIndex: 0 },
-  { question: "She ___ often go to the cinema.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "They ___ a meeting right now.", options: ["are having", "have", "has"], correctIndex: 0 },
-  { question: "I ___ sometimes watch TV in the evening.", options: ["am", "does", "do"], correctIndex: 2 },
-  { question: "He ___ usually drinks tea in the morning.", options: ["drink", "drinks", "is drinking"], correctIndex: 1 },
-  { question: "We ___ always enjoy our holidays.", options: ["do", "are", "does"], correctIndex: 0 },
-  { question: "You ___ right now too fast!", options: ["run", "are running", "runs"], correctIndex: 1 },
-  { question: "She ___ never goes to bed late.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "They ___ sometimes eat out.", options: ["do", "does", "are doing"], correctIndex: 0 },
-  { question: "I ___ a shower at the moment.", options: ["am having", "have", "has"], correctIndex: 0 },
-  { question: "He ___ usually work on Fridays.", options: ["works", "work", "is working"], correctIndex: 0 },
-  { question: "We ___ often play chess.", options: ["are", "do", "does"], correctIndex: 1 },
-  { question: "Are they ___ a new car right now?", options: ["buying", "buys", "buy"], correctIndex: 0 },
-  { question: "You ___ sometimes forget your homework.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "It ___ usually rain here in March.", options: ["is", "does", "does"], correctIndex: 1 },
-  { question: "She ___ a song at the moment.", options: ["is singing", "sings", "sing"], correctIndex: 0 },
-  { question: "I ___ sometimes help my friends.", options: ["do", "am", "does"], correctIndex: 0 },
-  { question: "He ___ never eats breakfast.", options: ["do", "does", "is"], correctIndex: 1 },
-  { question: "We ___ right now.", options: ["are walking", "walk", "walks"], correctIndex: 0 },
-  { question: "Do you ___ always go to the park?", options: ["does", "do", "are"], correctIndex: 1 },
-  { question: "They ___ usually travel in summer.", options: ["travel", "travels", "are traveling"], correctIndex: 0 },
-  { question: "I ___ reading a book right now.", options: ["am", "do", "does"], correctIndex: 0 },
-  { question: "She ___ often listen to music.", options: ["is", "listen", "listens"], correctIndex: 2 },
-  { question: "He ___ sometimes take a taxi.", options: ["take", "takes", "is taking"], correctIndex: 1 },
-  { question: "We ___ never go out on Mondays.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "You ___ right now too loud!", options: ["are speaking", "speak", "speaks"], correctIndex: 0 },
-  { question: "It ___ often snow in January.", options: ["snows", "is snowing", "snowify"], correctIndex: 0 },
-  { question: "Are they ___ dinner at the moment?", options: ["having", "have", "has"], correctIndex: 0 },
-  { question: "I ___ sometimes read newspapers.", options: ["do", "am", "does"], correctIndex: 0 },
-  { question: "She ___ never watches TV late.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "He ___ right now.", options: ["is cooking", "cooks", "cook"], correctIndex: 0 },
-  { question: "We ___ often go swimming.", options: ["are", "do", "does"], correctIndex: 1 },
-  { question: "You ___ sometimes forget your keys.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "It ___ never rains in summer.", options: ["does", "is", "do"], correctIndex: 0 },
-  { question: "She ___ a cake right now.", options: ["is baking", "bakes", "bake"], correctIndex: 0 },
-  { question: "I ___ usually drink water in the morning.", options: ["am drinking", "drink", "drinks"], correctIndex: 1 },
-  { question: "He ___ sometimes play football.", options: ["plays", "play", "is playing"], correctIndex: 0 },
-  { question: "We ___ right now.", options: ["are listening", "listen", "listens"], correctIndex: 0 },
-  { question: "Do they ___ always go to school on time?", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "You ___ usually read books in the evening.", options: ["read", "reads", "are reading"], correctIndex: 0 },
-  { question: "She ___ never eats chocolate.", options: ["do", "does", "is"], correctIndex: 1 },
-  { question: "He ___ sometimes helps his brother.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "We ___ a meeting right now.", options: ["are having", "have", "has"], correctIndex: 0 },
-  { question: "I ___ often listen to music.", options: ["am", "do", "does"], correctIndex: 1 },
-  { question: "They ___ usually play cards.", options: ["plays", "play", "are playing"], correctIndex: 1 },
-  { question: "She ___ right now.", options: ["is painting", "paints", "paint"], correctIndex: 0 },
-  { question: "He ___ never watches movies at home.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "We ___ sometimes eat out.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "You ___ often go jogging.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "It ___ right now.", options: ["is raining", "rains", "rain"], correctIndex: 0 },
-  { question: "I ___ never forget my homework.", options: ["do", "does", "am"], correctIndex: 0 },
-  { question: "She ___ sometimes goes shopping.", options: ["do", "does", "is"], correctIndex: 1 },
-  { question: "They ___ right now.", options: ["are playing", "play", "plays"], correctIndex: 0 },
-  { question: "He ___ often travels abroad.", options: ["travels", "travel", "is traveling"], correctIndex: 0 },
-  { question: "We ___ sometimes help our neighbors.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "You ___ right now too loudly!", options: ["are speaking", "speak", "speaks"], correctIndex: 0 },
-  { question: "It ___ often rains in autumn.", options: ["rains", "is raining", "rainify"], correctIndex: 0 },
-  { question: "I ___ sometimes read magazines.", options: ["do", "am", "does"], correctIndex: 0 },
-  { question: "She ___ never drinks soda.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "He ___ right now.", options: ["is sleeping", "sleeps", "sleep"], correctIndex: 0 },
-  { question: "We ___ often go hiking.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "You ___ sometimes arrive late.", options: ["do", "does", "are"], correctIndex: 0 },
-  { question: "They ___ never watch TV in the morning.", options: ["does", "do", "are"], correctIndex: 1 },
-  { question: "She ___ a song at the moment.", options: ["is singing", "sings", "sing"], correctIndex: 0 },
-  { question: "I ___ usually drink juice.", options: ["drink", "drinks", "am drinking"], correctIndex: 0 },
-  { question: "He ___ sometimes helps at home.", options: ["does", "do", "is"], correctIndex: 0 },
-  { question: "We ___ right now.", options: ["are reading", "read", "reads"], correctIndex: 0 },
-  { question: "Do you ___ often go to the theater?", options: ["do", "does", "are"], correctIndex: 0 }
-];
+const QUESTIONS=[{question:"She ___ to school every day.",options:["goes","is going","go"],correctIndex:0},{question:"They ___ football right now.",options:["play","are playing","plooting"],correctIndex:1},{question:"I usually ___ coffee in the morning.",options:["drink","am drinking","drunkify"],correctIndex:0},{question:"He ___ TV at the moment.",options:["watches","is watching","watchify"],correctIndex:1},{question:"We ___ dinner now.",options:["eat","are eating","eatoo"],correctIndex:1},{question:"She ___ sometimes late for work.",options:["is coming","comes","come"],correctIndex:1},{question:"They ___ never watch horror movies.",options:["do","are","does"],correctIndex:0},{question:"I ___ right now, can you call me later?",options:["am talking","talk","talks"],correctIndex:0},{question:"He often ___ in the morning.",options:["jogs","is jogging","jog"],correctIndex:0},{question:"We ___ to the gym on Mondays.",options:["go","is going","goes"],correctIndex:0},{question:"You ___ always forget your keys!",options:["does","do","are doing"],correctIndex:1},{question:"It ___ a lot in spring.",options:["rains","is raining","rainify"],correctIndex:0},{question:"She ___ a book right now.",options:["reads","is reading","readify"],correctIndex:1},{question:"Do they ___ breakfast every morning?",options:["have","are having","has"],correctIndex:0},{question:"He ___ his homework at the moment.",options:["is doing","does","do"],correctIndex:0},{question:"I ___ usually take a nap after lunch.",options:["am taking","take","takes"],correctIndex:1},{question:"They ___ right now.",options:["are dancing","dance","dances"],correctIndex:0},{question:"He ___ always forget his bag.",options:["does","do","is"],correctIndex:0},{question:"You ___ sometimes too quickly.",options:["drive","drives","are driving"],correctIndex:0},{question:"It ___ snow in winter.",options:["snows","is snowing","snow"],correctIndex:0},{question:"Are you ___ a new project?",options:["working on","work","works"],correctIndex:0},{question:"They ___ a meeting right now.",options:["are having","have","has"],correctIndex:0},{question:"I ___ a shower at the moment.",options:["am having","have","has"],correctIndex:0},{question:"We ___ right now.",options:["are walking","walk","walks"],correctIndex:0},{question:"They ___ usually play cards.",options:["plays","play","are playing"],correctIndex:1},{question:"She ___ right now.",options:["is painting","paints","paint"],correctIndex:0},{question:"It ___ right now.",options:["is raining","rains","rain"],correctIndex:0},{question:"I ___ never forget my homework.",options:["do","does","am"],correctIndex:0},{question:"They ___ right now.",options:["are playing","play","plays"],correctIndex:0}];
+QUESTIONS.forEach(q=>{const c=q.options[q.correctIndex];q.options=q.options.sort(()=>Math.random()-.5);q.correctIndex=q.options.indexOf(c);});
 
-QUESTIONS.forEach(q => {
-  const correctOption = q.options[q.correctIndex];
-  q.options = q.options.sort(() => Math.random() - 0.5);
-  q.correctIndex = q.options.indexOf(correctOption);
-});
+const FUNNY_NAMES=["🧠 Brainy Banana","🦄 Unicorn Teacher","🤖 Grammar Bot 9000","🐸 Sir Frogington","🔥 Verb Slayer","👽 Alien Student","🍕 Pizza Master","🦸 Super Student","🎩 Lord Tense","🐉 Dragon Grammarian","🧙 Wizard of Words","🦊 Foxy Linguist"];
+const SIZE=7;
 
-const FUNNY_NAMES = [
-  "🧠 Brainy Banana",
-  "🦄 Unicorn Teacher",
-  "🤖 Grammar Bot 9000",
-  "🐸 Sir Frogington",
-  "🔥 Verb Slayer",
-  "👽 Alien Student",
-  "🍕 Pizza Master",
-  "🦸 Super Student"
-];
-// =========================================
+let state={players:["",""],scores:[0,0],wins:[0,0],currentPlayer:0,board:Array((SIZE*(SIZE+1))/2).fill(null),phase:'setup'};
+let currentCell=null;
 
-const SIZE = 7;
+function rnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function randomName(){return rnd(FUNNY_NAMES)+" "+Math.floor(Math.random()*100);}
+function getIndex(r,c){return(r*(r-1))/2+c;}
+function getNeighbors(r,c){return[[r,c-1],[r,c+1],[r-1,c-1],[r-1,c],[r+1,c],[r+1,c+1]].filter(([nr,nc])=>nr>=1&&nr<=SIZE&&nc>=0&&nc<nr);}
 
-let state = {
-  players: [],
-  scores: [0, 0],
-  wins: [0, 0],
-  currentPlayer: 0,
-  board: Array((SIZE * (SIZE + 1)) / 2).fill(null),
-  phase: 'setup'
-};
-
-function randomName() {
-  return FUNNY_NAMES[Math.floor(Math.random() * FUNNY_NAMES.length)] + " " + Math.floor(Math.random()*100);
-}
-
-function getIndex(r, c) {
-  return (r * (r - 1)) / 2 + c;
-}
-
-function getNeighbors(r, c) {
-  return [
-    [r, c - 1], [r, c + 1],
-    [r - 1, c - 1], [r - 1, c],
-    [r + 1, c], [r + 1, c + 1]
-  ].filter(([nr, nc]) => nr >= 1 && nr <= SIZE && nc >= 0 && nc < nr);
-}
-
-function checkWin(player) {
-  const visited = new Set();
-
-  for (let r = 1; r <= SIZE; r++) {
-    for (let c = 0; c < r; c++) {
-      const start = getIndex(r, c);
-      if (state.board[start] !== player || visited.has(start)) continue;
-
-      let queue = [[r, c]];
-      let touchesLeft = false;
-      let touchesRight = false;
-      let touchesBottom = false;
-
-      while (queue.length) {
-        const [cr, cc] = queue.pop();
-        const idx = getIndex(cr, cc);
-        if (visited.has(idx)) continue;
+function checkWin(player){
+  const visited=new Set();
+  for(let r=1;r<=SIZE;r++){
+    for(let c=0;c<r;c++){
+      const start=getIndex(r,c);
+      if(state.board[start]!==player||visited.has(start))continue;
+      let queue=[[r,c]],tL=false,tR=false,tB=false;
+      while(queue.length){
+        const[cr,cc]=queue.pop(),idx=getIndex(cr,cc);
+        if(visited.has(idx))continue;
         visited.add(idx);
-
-        if (cc === 0) touchesLeft = true;
-        if (cc === cr - 1) touchesRight = true;
-        if (cr === SIZE) touchesBottom = true;
-
-        for (let [nr, nc] of getNeighbors(cr, cc)) {
-          const nIdx = getIndex(nr, nc);
-          if (state.board[nIdx] === player && !visited.has(nIdx)) {
-            queue.push([nr, nc]);
-          }
-        }
+        if(cc===0)tL=true;
+        if(cc===cr-1)tR=true;
+        if(cr===SIZE)tB=true;
+        for(let[nr,nc]of getNeighbors(cr,cc)){const nIdx=getIndex(nr,nc);if(state.board[nIdx]===player&&!visited.has(nIdx))queue.push([nr,nc]);}
       }
-
-      if (touchesLeft && touchesRight && touchesBottom) return true;
+      if(tL&&tR&&tB)return true;
     }
   }
   return false;
 }
 
-function bigConfetti() {
-  const duration = 3000;
-  const end = Date.now() + duration;
-
-  (function frame() {
-    confetti({ particleCount: 40, spread: 160, origin: { x: Math.random(), y: Math.random() - 0.2 } });
-    if (Date.now() < end) requestAnimationFrame(frame);
-  })();
+function bigConfetti(){
+  const end=Date.now()+3000;
+  (function frame(){confetti({particleCount:40,spread:160,origin:{x:Math.random(),y:Math.random()-.2}});if(Date.now()<end)requestAnimationFrame(frame);})();
 }
 
-function renderSetup() {
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <div class="flex flex-col items-center justify-center h-screen gap-4">
-      <h1 class="text-4xl font-black">🔥 GRAMMAR CLASH 🔥</h1>
-      <div class="space-y-3 bg-white/20 p-6 rounded-2xl backdrop-blur w-full max-w-md">
-        <input id="p1" class="border p-2 w-full rounded text-black" value="${randomName()}" />
-        <input id="p2" class="border p-2 w-full rounded text-black" value="${randomName()}" />
-        <button onclick="startGame()" class="bg-yellow-400 hover:bg-yellow-300 text-black px-4 py-2 rounded-xl font-bold w-full">🚀 Start Game</button>
-      </div>
+function setTheme(t){
+  document.body.className='theme-'+t;
+  document.querySelectorAll('.tb-theme').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));
+}
+
+function closePopup(){const o=document.getElementById('overlay');if(o)o.remove();}
+
+function askRestart(){
+  closePopup();
+  const overlay=document.createElement('div');
+  overlay.className='overlay';
+  overlay.id='overlay';
+  const popup=document.createElement('div');
+  popup.className='popup';
+  popup.innerHTML=`
+    <div class="popup-title">↺ Restart hry</div>
+    <div class="popup-sub">Opravdu chceš restartovat? Aktuální skóre a deska se vynulují. Výhry zůstanou.</div>
+    <div class="popup-actions">
+      <button class="btn-pop no" onclick="closePopup()">Zrušit</button>
+      <button class="btn-pop yes" onclick="doRestart()">Restartovat</button>
+    </div>`;
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+}
+
+function doRestart(){
+  closePopup();
+  state.board=Array((SIZE*(SIZE+1))/2).fill(null);
+  state.scores=[0,0];
+  state.currentPlayer=0;
+  if(state.phase==='game')render();
+  else renderSetup();
+}
+
+function render(){
+  const root=document.getElementById('root');
+  root.innerHTML='';
+  const hdr=document.createElement('div');
+  hdr.id='header';
+  hdr.innerHTML=`
+    <div class="player-box">
+      <div class="player-name p0">${state.players[0]}</div>
+      <div class="player-stats">⭐ ${state.scores[0]} &nbsp;🏆 ${state.wins[0]}</div>
     </div>
-  `;
-}
+    <div class="turn-indicator">🎯 ${state.players[state.currentPlayer]}</div>
+    <div class="player-box right">
+      <div class="player-name p1">${state.players[1]}</div>
+      <div class="player-stats">⭐ ${state.scores[1]} &nbsp;🏆 ${state.wins[1]}</div>
+    </div>`;
+  root.appendChild(hdr);
 
-function startGame() {
-  state.players = [
-    document.getElementById('p1').value,
-    document.getElementById('p2').value
-  ];
-  state.phase = 'game';
-  renderGame();
-}
-
-function renderGame() {
-  const app = document.getElementById('app');
-
-  let index = 0;
-  let rowsHtml = '';
-
-  for (let row = 1; row <= SIZE; row++) {
-    rowsHtml += `<div class="flex justify-center gap-2">`;
-
-    for (let col = 0; col < row; col++) {
-      const cell = state.board[index];
-
-      rowsHtml += `
-        <div onclick="selectCell(${index})"
-          class="w-14 h-14 flex items-center justify-center rounded-xl font-bold shadow-lg cursor-pointer transform hover:scale-110 transition
-          ${cell === 0 ? 'bg-red-500 text-white' : cell === 1 ? 'bg-blue-500 text-white' : 'bg-white text-black'}">
-          ${index + 1}
-        </div>
-      `;
-
-      index++;
+  const wrap=document.createElement('div');
+  wrap.id='board-wrap';
+  const board=document.createElement('div');
+  board.className='board';
+  let idx=0;
+  for(let r=1;r<=SIZE;r++){
+    const row=document.createElement('div');
+    row.className='board-row';
+    for(let c=0;c<r;c++){
+      const cell=document.createElement('button');
+      cell.className='cell '+(state.board[idx]===null?'empty':state.board[idx]===0?'p0 taken':'p1 taken');
+      cell.textContent=idx+1;
+      cell.dataset.idx=idx;
+      if(state.board[idx]===null)cell.onclick=()=>selectCell(+cell.dataset.idx);
+      row.appendChild(cell);
+      idx++;
     }
-
-    rowsHtml += `</div>`;
+    board.appendChild(row);
   }
-
-  app.innerHTML = `
-    <div class="flex flex-col min-h-screen">
-      
-      <div class="w-full bg-black/40 backdrop-blur p-4 flex justify-between items-center">
-        <div>
-          <div class="font-bold text-red-300">${state.players[0]}</div>
-          <div>⭐ ${state.scores[0]} | 🏆 ${state.wins[0]}</div>
-        </div>
-
-        <div class="font-bold text-lg">🎯 ${state.players[state.currentPlayer]}</div>
-
-        <div class="text-right">
-          <div class="font-bold text-blue-300">${state.players[1]}</div>
-          <div>⭐ ${state.scores[1]} | 🏆 ${state.wins[1]}</div>
-        </div>
-      </div>
-
-      <div class="flex-1 flex items-center justify-center">
-        <div class="space-y-2">${rowsHtml}</div>
-      </div>
-    </div>
-
-    <div id="popup" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center">
-      <div class="bg-white text-black p-6 rounded-2xl max-w-md w-full">
-        <div id="popupContent"></div>
-      </div>
-    </div>
-  `;
+  wrap.appendChild(board);
+  root.appendChild(wrap);
 }
 
-let currentCell = null;
+function renderSetup(){
+  state.phase='setup';
+  const root=document.getElementById('root');
+  root.innerHTML='';
 
-function selectCell(index) {
-  if (state.board[index] !== null) return;
-  currentCell = index;
-  const q = QUESTIONS[index % QUESTIONS.length];
+  const names=[randomName(),randomName()];
 
-  document.getElementById('popup').classList.remove('hidden');
-
-  document.getElementById('popupContent').innerHTML = `
-    <p class="mb-3 font-bold text-lg">❓ ${q.question}</p>
-    ${q.options.map((opt, i) => `
-      <button onclick="answer(${i})" class="block w-full text-left border p-3 my-2 rounded-lg hover:bg-yellow-100">
-        ${opt}
-      </button>
-    `).join('')}
-  `;
+  const s=document.createElement('div');
+  s.id='setup';
+  s.innerHTML=`
+    <h1>🔥 Grammar Clash 🔥</h1>
+    <div class="setup-card">
+      <div class="name-row">
+        <input id="p1" class="setup-input" placeholder="Hráč 1" value="${names[0]}">
+        <button class="btn-shuffle" title="Náhodné jméno" onclick="shuffleName('p1')">🎲</button>
+      </div>
+      <div class="name-row">
+        <input id="p2" class="setup-input" placeholder="Hráč 2" value="${names[1]}">
+        <button class="btn-shuffle" title="Náhodné jméno" onclick="shuffleName('p2')">🎲</button>
+      </div>
+      <button class="btn-start" onclick="startGame()">🚀 Start Game</button>
+    </div>`;
+  root.appendChild(s);
 }
 
-function answer(index) {
-  const q = QUESTIONS[currentCell % QUESTIONS.length];
+function shuffleName(id){
+  document.getElementById(id).value=randomName();
+}
 
-  if (index === q.correctIndex) {
-    state.board[currentCell] = state.currentPlayer;
+function startGame(){
+  state.players=[
+    document.getElementById('p1').value||'Player 1',
+    document.getElementById('p2').value||'Player 2'
+  ];
+  state.scores=[0,0];
+  state.wins=[0,0];
+  state.board=Array((SIZE*(SIZE+1))/2).fill(null);
+  state.currentPlayer=0;
+  state.phase='game';
+  render();
+}
+
+function selectCell(index){
+  if(state.board[index]!==null)return;
+  currentCell=index;
+  const q=QUESTIONS[index%QUESTIONS.length];
+  const overlay=document.createElement('div');
+  overlay.className='overlay';
+  overlay.id='overlay';
+  const popup=document.createElement('div');
+  popup.className='popup';
+  popup.innerHTML=`<div class="popup-q">❓ ${q.question}</div>`
+    +q.options.map((opt,i)=>`<button class="opt-btn" onclick="answer(${i})">${opt}</button>`).join('');
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+}
+
+function answer(index){
+  const q=QUESTIONS[currentCell%QUESTIONS.length];
+  closePopup();
+  if(index===q.correctIndex){
+    state.board[currentCell]=state.currentPlayer;
     state.scores[state.currentPlayer]++;
-
-    if (checkWin(state.currentPlayer)) {
+    if(checkWin(state.currentPlayer)){
       state.wins[state.currentPlayer]++;
       bigConfetti();
-      document.getElementById('popup').classList.remove('hidden');
-      document.getElementById('popupContent').innerHTML = `
-        <div class="text-center">
-          <h2 class="text-2xl font-bold mb-4">🎉 CONGRATULATIONS 🎉</h2>
-          <p class="text-lg mb-4">${state.players[state.currentPlayer]} wins the game!</p>
-          <button onclick="restartGame()" class="bg-yellow-400 px-4 py-2 rounded-xl font-bold">Play Again</button>
-        </div>
-      `;
+      render();
+      const overlay=document.createElement('div');
+      overlay.className='overlay';
+      overlay.id='overlay';
+      const popup=document.createElement('div');
+      popup.className='popup win-popup';
+      popup.innerHTML=`
+        <h2>🎉 CONGRATULATIONS 🎉</h2>
+        <p>${state.players[state.currentPlayer]} wins!</p>
+        <button class="btn-again" onclick="doRestart()">Play Again</button>`;
+      overlay.appendChild(popup);
+      document.body.appendChild(overlay);
       return;
     }
   }
-
-  state.currentPlayer = 1 - state.currentPlayer;
-
-  document.getElementById('popup').classList.add('hidden');
-  renderGame();
-}
-
-function restartGame() {
-  state.scores = [0, 0];
-  state.board = Array((SIZE * (SIZE + 1)) / 2).fill(null);
-  state.currentPlayer = 0;
-  renderGame();
+  state.currentPlayer=1-state.currentPlayer;
+  render();
 }
 
 renderSetup();
 </script>
-
 </body>
 </html>

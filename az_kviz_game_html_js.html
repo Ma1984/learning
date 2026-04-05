@@ -17,7 +17,6 @@ body.theme-fire #toolbar{background:rgba(0,0,0,.35)}
 body.theme-ocean #toolbar{background:rgba(0,0,0,.45)}
 body.theme-slate #toolbar{background:rgba(0,0,0,.5);border-top:1px solid rgba(255,255,255,.08)}
 body.theme-mono #toolbar{background:rgba(220,220,220,.85);border-top:1px solid #ccc}
-
 .tb-btn{border:none;cursor:pointer;border-radius:12px;font-size:16px;font-weight:700;padding:11px 22px;transition:opacity .15s,transform .1s}
 .tb-btn:hover{opacity:.85;transform:scale(1.04)}
 .tb-restart{background:#ef4444;color:#fff}
@@ -34,13 +33,13 @@ body.theme-mono .tb-sep{background:#bbb}
 .swatch-slate{background:linear-gradient(135deg,#1e293b,#475569)}
 .swatch-mono{background:linear-gradient(135deg,#d4d4d4,#f8f8f8);border:1px solid #aaa}
 
-#header{width:100%;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px)}
+#header{width:100%;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(8px)}
 body.theme-fire #header,body.theme-ocean #header{background:rgba(0,0,0,.35)}
 body.theme-slate #header{background:rgba(0,0,0,.4)}
 body.theme-mono #header{background:rgba(255,255,255,.7);border-bottom:1px solid #ddd;color:#111}
 .player-box{text-align:left}
 .player-box.right{text-align:right}
-.player-name{font-weight:700;font-size:14px}
+.player-name{font-weight:700;font-size:18px}
 body.theme-fire .player-name.p0{color:#fca5a5}
 body.theme-fire .player-name.p1{color:#93c5fd}
 body.theme-ocean .player-name.p0{color:#fca5a5}
@@ -49,26 +48,23 @@ body.theme-slate .player-name.p0{color:#fca5a5}
 body.theme-slate .player-name.p1{color:#7dd3fc}
 body.theme-mono .player-name.p0{color:#dc2626}
 body.theme-mono .player-name.p1{color:#2563eb}
-.player-stats{font-size:12px;opacity:.8}
-.turn-indicator{font-weight:700;font-size:15px;text-align:center}
+.player-stats{font-size:20px;margin-top:4px;letter-spacing:1px}
+.turn-indicator{font-weight:700;font-size:19px;text-align:center}
 
-#setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-bottom:60px}
+#setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-bottom:80px}
 .setup-card{padding:24px 28px;border-radius:18px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:400px}
 body.theme-fire .setup-card,body.theme-ocean .setup-card{background:rgba(255,255,255,.18)}
 body.theme-slate .setup-card{background:rgba(255,255,255,.07)}
 body.theme-mono .setup-card{background:#fff;border:1px solid #ddd;box-shadow:0 2px 12px rgba(0,0,0,.08)}
 h1{font-size:32px;font-weight:900;text-align:center;letter-spacing:-1px}
-
 .name-row{display:flex;gap:8px;align-items:center}
 .setup-input{padding:10px 14px;border-radius:10px;border:none;font-size:15px;outline:none;flex:1;min-width:0}
 body.theme-mono .setup-input{border:1px solid #ccc;background:#fafafa;color:#111}
 body.theme-fire .setup-input,body.theme-ocean .setup-input,body.theme-slate .setup-input{background:rgba(255,255,255,.9);color:#111}
-
 .btn-shuffle{padding:9px 12px;border-radius:10px;border:none;font-size:16px;cursor:pointer;flex-shrink:0;transition:transform .15s,opacity .15s;line-height:1}
 .btn-shuffle:hover{transform:rotate(20deg) scale(1.1);opacity:.85}
 body.theme-fire .btn-shuffle,body.theme-ocean .btn-shuffle,body.theme-slate .btn-shuffle{background:rgba(255,255,255,.25);color:#fff}
 body.theme-mono .btn-shuffle{background:#e5e7eb;color:#333}
-
 .btn-start{padding:12px;border-radius:12px;border:none;font-size:16px;font-weight:800;cursor:pointer;transition:opacity .15s}
 .btn-start:hover{opacity:.88}
 body.theme-fire .btn-start{background:#fbbf24;color:#000}
@@ -76,7 +72,7 @@ body.theme-ocean .btn-start{background:#0284c7;color:#fff}
 body.theme-slate .btn-start{background:#334155;color:#fff}
 body.theme-mono .btn-start{background:#111;color:#fff}
 
-#board-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 8px 70px}
+#board-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:12px 8px 80px}
 .board{display:flex;flex-direction:column;gap:6px;align-items:center}
 .board-row{display:flex;gap:6px;justify-content:center}
 .cell{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;cursor:pointer;transition:transform .1s,background .2s;user-select:none;border:none}
@@ -206,12 +202,12 @@ function render(){
   hdr.innerHTML=`
     <div class="player-box">
       <div class="player-name p0">${state.players[0]}</div>
-      <div class="player-stats">⭐ ${state.scores[0]} &nbsp;🏆 ${state.wins[0]}</div>
+      <div class="player-stats">⭐ ${state.scores[0]} &nbsp; 🏆 ${state.wins[0]}</div>
     </div>
     <div class="turn-indicator">🎯 ${state.players[state.currentPlayer]}</div>
     <div class="player-box right">
       <div class="player-name p1">${state.players[1]}</div>
-      <div class="player-stats">⭐ ${state.scores[1]} &nbsp;🏆 ${state.wins[1]}</div>
+      <div class="player-stats">⭐ ${state.scores[1]} &nbsp; 🏆 ${state.wins[1]}</div>
     </div>`;
   root.appendChild(hdr);
 
@@ -242,20 +238,17 @@ function renderSetup(){
   state.phase='setup';
   const root=document.getElementById('root');
   root.innerHTML='';
-
-  const names=[randomName(),randomName()];
-
   const s=document.createElement('div');
   s.id='setup';
   s.innerHTML=`
     <h1>🔥 Grammar Clash 🔥</h1>
     <div class="setup-card">
       <div class="name-row">
-        <input id="p1" class="setup-input" placeholder="Hráč 1" value="${names[0]}">
+        <input id="p1" class="setup-input" placeholder="Hráč 1" value="${randomName()}">
         <button class="btn-shuffle" title="Náhodné jméno" onclick="shuffleName('p1')">🎲</button>
       </div>
       <div class="name-row">
-        <input id="p2" class="setup-input" placeholder="Hráč 2" value="${names[1]}">
+        <input id="p2" class="setup-input" placeholder="Hráč 2" value="${randomName()}">
         <button class="btn-shuffle" title="Náhodné jméno" onclick="shuffleName('p2')">🎲</button>
       </div>
       <button class="btn-start" onclick="startGame()">🚀 Start Game</button>

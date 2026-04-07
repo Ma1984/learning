@@ -547,7 +547,7 @@ function genProblem(mode){
 ============================================================ */
 function doAnswer(selected, correct){
   S.selected=selected;
-  const ok = (typeof correct==='number') ? selected===correct : selected===correct;
+  const ok = selected===correct;
   S.answered=ok;
   if(ok){ S.score++; S.streak++; celebrate(S.streak>=5); }
   else { S.streak=0; }
@@ -841,7 +841,7 @@ function renderNL(content, p){
   // After render: scroll to reveal the target number
   setTimeout(()=>{
     const circles=nl.querySelectorAll('.nl-circle');
-    const idx=S.answered!==null ? p.target : p.target;
+    const idx=p.target;
     if(circles[idx]){
       circles[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
     }

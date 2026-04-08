@@ -316,53 +316,50 @@ body{
   color:#1e293b;
 }
 .nl-target{color:#7c3aed;font-size:1.2em}
-.nl-outer{
+/* Number line: two rows, no scrolling */
+.nl-rows{
   width:100%;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:12px 0 16px;
-  cursor:grab;
-  scrollbar-width:none;
-}
-.nl-outer::-webkit-scrollbar{display:none}
-.nl-outer:active{cursor:grabbing}
-.nl{
   display:flex;
-  align-items:center;
-  width:max-content;
-  padding:8px 20px;
-  gap:0;
+  flex-direction:column;
+  gap:10px;
+  padding:6px 0;
+}
+.nl-row{
+  display:grid;
+  grid-template-columns:repeat(11,1fr);
+  gap:5px;
+  width:100%;
+}
+.nl-row-bottom{
+  /* 11–20 is 10 numbers; shift right by half a column to visually align
+     under the gap between 10 and 11 (optical alignment with top row) */
+  grid-template-columns:repeat(10,1fr);
+  padding:0 calc(50%/11);
 }
 .nl-circle{
-  width:clamp(52px,10vw,64px);
-  height:clamp(52px,10vw,64px);
+  aspect-ratio:1/1;
+  width:100%;
   border-radius:50%;
   background:white;
   border:3px solid #cbd5e1;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:clamp(17px,4vw,22px);
+  font-size:clamp(14px,3.2vw,20px);
   font-weight:900;
   cursor:pointer;
   font-family:inherit;
   color:#334155;
   touch-action:manipulation;
   transition:transform .12s,background .15s,border-color .15s;
-  flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
   user-select:none;
-  position:relative;
+  padding:0;
+  min-width:0;
 }
 .nl-circle:active:not(.nl-ok):not(.nl-no):not(.nl-locked){
   transform:scale(0.88);
   background:#f1f5f9;
-}
-.nl-conn{
-  height:5px;
-  width:clamp(4px,1.2vw,10px);
-  background:#cbd5e1;
-  flex-shrink:0;
 }
 .nl-ok{
   background:#10b981 !important;
@@ -546,7 +543,6 @@ body{
 const TOTAL = 20;
 const CHAR_MIN_PCT = 3;    // keep progress character inside track bounds
 const CHAR_MAX_PCT = 97;
-const NL_SCROLL_CENTER = 10; // neutral scroll position on number line (middle of 0-20)
 const STAR3_THRESHOLD = 0.85;
 const STAR2_THRESHOLD = 0.60;
 
@@ -806,15 +802,13 @@ function renderProgressBar(parent){
 /* ============================================================
    NUMBER LINE INPUT (shared by add/sub/mixed/missing/nl modes)
 ============================================================ */
-function renderNumberLine(parent, correctAnswer, targetLabel){
-  const outer=el('div','nl-outer');
-  const nl=el('div','nl');
-
+function renderNumberLine(parent, correctAnswer){
   // True when the user just answered correctly (locked + no wrong selection pending)
   const isJustAnsweredCorrectly = S.locked && S.lastWrong===null && S.problemNum>0;
 
-  for(let i=0;i<=20;i++){
-    if(i>0) nl.appendChild(el('div','nl-conn'));
+  const rows=el('div','nl-rows');
+
+  function makeCircle(i){
     const circle=el('button','nl-circle',i);
     if(S.locked){
       circle.classList.add('nl-locked');
@@ -823,21 +817,20 @@ function renderNumberLine(parent, correctAnswer, targetLabel){
     } else {
       circle.addEventListener('click',()=>handleNumberAnswer(i));
     }
-    nl.appendChild(circle);
+    return circle;
   }
 
-  outer.appendChild(nl);
-  parent.appendChild(outer);
+  // Row 1: 0–10
+  const row1=el('div','nl-row');
+  for(let i=0;i<=10;i++) row1.appendChild(makeCircle(i));
+  rows.appendChild(row1);
 
-  // Auto-scroll: center around estimated answer midpoint
-  setTimeout(()=>{
-    const circles=nl.querySelectorAll('.nl-circle');
-    // Scroll so the answer area is visible: center on NL_SCROLL_CENTER (neutral, middle of 0-20)
-    const idx=Math.min(20,Math.max(0,targetLabel??NL_SCROLL_CENTER));
-    if(circles[idx]){
-      circles[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-    }
-  },60);
+  // Row 2: 11–20
+  const row2=el('div','nl-row nl-row-bottom');
+  for(let i=11;i<=20;i++) row2.appendChild(makeCircle(i));
+  rows.appendChild(row2);
+
+  parent.appendChild(rows);
 }
 
 /* ============================================================
@@ -970,7 +963,7 @@ function renderAddSub(content, p){
   hintLbl.textContent='👇 Klikni na správné číslo';
   content.appendChild(hintLbl);
 
-  renderNumberLine(content, p.answer, p.answer);
+  renderNumberLine(content, p.answer);
 }
 
 /* ----- MISSING NUMBER ----- */
@@ -1036,7 +1029,7 @@ function renderMissing(content, p){
   hintLbl.textContent='👇 Klikni na správné číslo';
   content.appendChild(hintLbl);
 
-  renderNumberLine(content, p.answer, p.answer);
+  renderNumberLine(content, p.answer);
 }
 
 /* ----- COMPARE ----- */
@@ -1120,7 +1113,7 @@ function renderNL(content, p){
   hintLbl.textContent='👇 Klikni na správné číslo';
   content.appendChild(hintLbl);
 
-  renderNumberLine(content, p.target, p.target);
+  renderNumberLine(content, p.target);
 }
 
 /* ----- COMPLETION SCREEN ----- */

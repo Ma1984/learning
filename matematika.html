@@ -307,6 +307,9 @@ body{
 .dot-b{background:#3b82f6;border-color:#1d4ed8}
 .dot-g{background:#10b981;border-color:#047857}
 .dot-o{background:#f59e0b;border-color:#b45309}
+.dot{transition:transform 220ms ease,opacity 220ms ease,background 220ms ease,border-color 220ms ease}
+.dot.removing{transform:scale(0.65);opacity:0.2;background:#94a3b8;border-color:#64748b}
+@media(prefers-reduced-motion:reduce){.dot{transition:none}}
 
 /* ===== NUMBER LINE ANSWER INPUT ===== */
 .nl-inst{
@@ -626,32 +629,46 @@ function makeDotsVisual(n, col1='dot-r', col2='dot-b'){
   return wrap;
 }
 
-/* Ten-frame for subtraction: shows 'a' total dots with first 'a-b' colored
-   (the "remaining" answer) and the last 'b' grey (the "taken away" part). */
-function makeSubtractDotsVisual(a, b, col){
-  const answer=a-b;
-  const wrap=el('div','dots-wrap');
-  function subtractFrame(frameStart){
-    const frame=el('div','tf');
-    for(let i=0;i<10;i++){
-      const pos=frameStart+i;
-      let cls='dot';
-      if(pos<a){
-        if(pos<answer) cls+=' '+col; // remaining (colored)
-        // else: grey = "taken away"
-      }
-      frame.appendChild(el('div',cls));
+/* Animated ten-frame for subtraction.
+   Step 1: show 'a' filled dots (and 10-a empty).
+   Step 2: remove 'b' dots right-to-left one by one.
+   Result: 'a-b' filled dots remain.
+   Returns the wrapper element synchronously; animation runs in the background. */
+function animateSubtractionTenFrame({container, a, b, stepDelay=280, startDelay=300}){
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  a = Math.max(0, Math.min(10, a));
+  b = Math.max(0, Math.min(a, b));
+
+  container.innerHTML = '';
+  const frame = el('div','tf');
+  const dots = [];
+  for(let i=0;i<10;i++){
+    const d = el('div','dot'+(i<a?' dot-r':''));
+    frame.appendChild(d);
+    dots.push(d);
+  }
+  container.appendChild(frame);
+
+  if(reducedMotion){
+    // Skip animation — show result immediately
+    let removed=0;
+    for(let i=a-1; i>=0 && removed<b; i--,removed++){
+      dots[i].classList.remove('dot-r');
     }
-    return frame;
+    return;
   }
-  if(a<=10){
-    wrap.appendChild(subtractFrame(0));
-  } else {
-    wrap.appendChild(subtractFrame(0));
-    wrap.appendChild(el('div','dots-sep'));
-    wrap.appendChild(subtractFrame(10));
-  }
-  return wrap;
+
+  // Animate asynchronously
+  (async()=>{
+    await new Promise(r=>setTimeout(r, startDelay));
+    let removed=0;
+    for(let i=a-1; i>=0 && removed<b; i--){
+      dots[i].classList.add('removing');
+      removed++;
+      await new Promise(r=>setTimeout(r, stepDelay));
+      dots[i].classList.remove('removing','dot-r');
+    }
+  })();
 }
 
 /* ============================================================
@@ -955,8 +972,10 @@ function renderAddSub(content, p){
     dv.appendChild(el('div','op-lbl','+'));
     dv.appendChild(makeDotsVisual(p.b,'dot-b','dot-b'));
   } else {
-    // Take-away visual: a total dots, answer colored, b grey ("removed")
-    dv.appendChild(makeSubtractDotsVisual(p.a, p.b, 'dot-r'));
+    // Animated take-away: start with 'a' filled, remove 'b' one by one
+    const subContainer = el('div','dots-wrap');
+    dv.appendChild(subContainer);
+    animateSubtractionTenFrame({container: subContainer, a: p.a, b: p.b});
   }
   card.appendChild(dv);
 

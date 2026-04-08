@@ -326,15 +326,9 @@ body{
 }
 .nl-row{
   display:grid;
-  grid-template-columns:repeat(11,1fr);
+  grid-template-columns:repeat(10,1fr);
   gap:5px;
   width:100%;
-}
-.nl-row-bottom{
-  /* 11–20 is 10 numbers; shift right by half a column to visually align
-     under the gap between 10 and 11 (optical alignment with top row) */
-  grid-template-columns:repeat(10,1fr);
-  padding:0 calc(50%/11);
 }
 .nl-circle{
   aspect-ratio:1/1;
@@ -637,12 +631,12 @@ function makeDotsVisual(n, col1='dot-r', col2='dot-b'){
 ============================================================ */
 function genAddition(){
   let a,b;
-  do{ a=rnd(0,10); b=rnd(0,10); } while(a+b>20);
+  do{ a=rnd(1,10); b=rnd(0,10); } while(a+b>20);
   return {type:'add', a, b, answer:a+b};
 }
 
 function genSubtraction(){
-  const answer=rnd(0,10);
+  const answer=rnd(1,10);
   const b=rnd(0,10);
   const a=answer+b;
   if(a>20) return genSubtraction();
@@ -657,24 +651,24 @@ function genMissing(){
   const vt=rnd(0,2);
   let a=null, b=null, c, answer;
   if(vt===0){
-    a=rnd(0,15); answer=rnd(0,20-a); c=a+answer;
+    a=rnd(1,15); answer=rnd(1,20-a); c=a+answer;
   } else if(vt===1){
-    b=rnd(0,15); answer=rnd(0,20-b); c=answer+b;
+    b=rnd(1,15); answer=rnd(1,20-b); c=answer+b;
   } else {
-    c=rnd(0,10); answer=rnd(0,10); a=c+answer;
+    c=rnd(1,9); answer=rnd(1,10); a=c+answer;
     if(a>20) return genMissing();
   }
   return {type:'missing', vt, a, b, c, answer};
 }
 
 function genCompare(){
-  const a=rnd(0,20), b=rnd(0,20);
+  const a=rnd(1,20), b=rnd(1,20);
   const answer=a>b?'>':a<b?'<':'=';
   return {type:'compare', a, b, answer};
 }
 
 function genNumberLine(){
-  const target=rnd(0,20);
+  const target=rnd(1,20);
   return {type:'nl', target, answer:target};
 }
 
@@ -820,13 +814,13 @@ function renderNumberLine(parent, correctAnswer){
     return circle;
   }
 
-  // Row 1: 0–10
+  // Row 1: 1–10
   const row1=el('div','nl-row');
-  for(let i=0;i<=10;i++) row1.appendChild(makeCircle(i));
+  for(let i=1;i<=10;i++) row1.appendChild(makeCircle(i));
   rows.appendChild(row1);
 
   // Row 2: 11–20
-  const row2=el('div','nl-row nl-row-bottom');
+  const row2=el('div','nl-row');
   for(let i=11;i<=20;i++) row2.appendChild(makeCircle(i));
   rows.appendChild(row2);
 

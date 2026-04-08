@@ -965,20 +965,6 @@ function renderAddSub(content, p){
 
   const card=el('div','pcard');
 
-  // Ten-frame dot visualization
-  const dv=el('div','dot-visual');
-  if(isAdd){
-    dv.appendChild(makeDotsVisual(p.a,'dot-r','dot-r'));
-    dv.appendChild(el('div','op-lbl','+'));
-    dv.appendChild(makeDotsVisual(p.b,'dot-b','dot-b'));
-  } else {
-    // Animated take-away: start with 'a' filled, remove 'b' one by one
-    const subContainer = el('div','dots-wrap');
-    dv.appendChild(subContainer);
-    animateSubtractionTenFrame({container: subContainer, a: p.a, b: p.b});
-  }
-  card.appendChild(dv);
-
   // Text formula
   const formula=el('div','formula');
   const resultSpan=el('span','mbox');

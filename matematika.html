@@ -21,11 +21,9 @@ body{
   align-items:center;
   color:#1e293b;
 }
-
-/* ===== ROOT ===== */
 #root{
   width:100%;
-  max-width:820px;
+  max-width:900px;
   flex:1;
   display:flex;
   flex-direction:column;
@@ -37,19 +35,20 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:18px;
-  padding:28px 16px 40px;
+  gap:20px;
+  padding:32px 20px 48px;
   width:100%;
 }
 .home-title{
-  font-size:clamp(38px,10vw,60px);
+  font-size:clamp(40px,10vw,64px);
   font-weight:900;
   color:#4c1d95;
   text-align:center;
-  text-shadow:0 3px 6px rgba(0,0,0,.1);
+  text-shadow:0 3px 8px rgba(0,0,0,.12);
+  line-height:1.1;
 }
 .home-sub{
-  font-size:clamp(14px,3.5vw,18px);
+  font-size:clamp(16px,3.8vw,20px);
   color:#64748b;
   text-align:center;
   margin-top:-8px;
@@ -57,8 +56,8 @@ body{
 .score-pill{
   background:white;
   border-radius:999px;
-  padding:10px 26px;
-  font-size:clamp(18px,4vw,22px);
+  padding:12px 30px;
+  font-size:clamp(20px,4.5vw,26px);
   font-weight:800;
   box-shadow:0 2px 12px rgba(0,0,0,.1);
   color:#1e293b;
@@ -68,77 +67,162 @@ body{
 .act-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:14px;
+  gap:16px;
   width:100%;
 }
 .ac{
   background:white;
-  border-radius:22px;
+  border-radius:24px;
   border:3px solid transparent;
-  padding:26px 14px;
+  padding:28px 16px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:8px;
+  gap:10px;
   cursor:pointer;
-  box-shadow:0 4px 18px rgba(0,0,0,.08);
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
   transition:transform .12s;
   touch-action:manipulation;
   user-select:none;
+  min-height:150px;
+  justify-content:center;
 }
-.ac:active{transform:scale(0.94)}
-.ac.full{grid-column:1/-1;flex-direction:row;justify-content:center;gap:18px;padding:22px 24px}
-.ac-icon{font-size:46px;line-height:1}
-.ac.full .ac-icon{font-size:38px}
-.ac-name{font-size:clamp(16px,4vw,20px);font-weight:800;text-align:center}
-.ac.full .ac-name{font-size:clamp(18px,4.5vw,22px)}
-.ac-hint{font-size:13px;color:#94a3b8;text-align:center}
+.ac:active{transform:scale(0.93)}
+.ac.full{grid-column:1/-1;flex-direction:row;justify-content:center;gap:20px;padding:24px;min-height:auto}
+.ac-icon{font-size:52px;line-height:1}
+.ac.full .ac-icon{font-size:42px}
+.ac-name{font-size:clamp(17px,4vw,22px);font-weight:800;text-align:center}
+.ac.full .ac-name{font-size:clamp(19px,4.5vw,24px)}
+.ac-hint{font-size:clamp(12px,2.5vw,14px);color:#94a3b8;text-align:center}
 .ac-green {border-color:#10b981}
 .ac-blue  {border-color:#3b82f6}
+.ac-teal  {border-color:#0d9488}
 .ac-orange{border-color:#f59e0b}
 .ac-purple{border-color:#8b5cf6}
 .ac-pink  {border-color:#ec4899}
 
-/* ===== ACTIVITY SCREEN ===== */
+/* ===== TOP BAR ===== */
 .top-bar{
   width:100%;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:14px 16px;
+  padding:14px 20px;
   position:sticky;
   top:0;
   z-index:20;
-  background:rgba(255,255,255,.75);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(0,0,0,.06);
+  background:rgba(255,255,255,.8);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(0,0,0,.07);
 }
 .back-btn{
   background:white;
   border:2px solid #e2e8f0;
   border-radius:50px;
-  padding:10px 22px;
-  font-size:clamp(14px,3.5vw,17px);
+  padding:12px 26px;
+  font-size:clamp(15px,3.5vw,18px);
   font-weight:800;
   cursor:pointer;
   font-family:inherit;
   color:#334155;
   touch-action:manipulation;
   box-shadow:0 2px 8px rgba(0,0,0,.07);
+  min-height:50px;
 }
 .back-btn:active{transform:scale(0.95)}
+.score-bar-pill{
+  background:white;
+  border-radius:999px;
+  padding:10px 22px;
+  font-size:clamp(17px,3.5vw,21px);
+  font-weight:800;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
 
+/* ===== PROGRESS BAR ===== */
+.progress-section{
+  width:100%;
+  padding:16px 20px 4px;
+}
+.progress-label{
+  text-align:center;
+  font-size:clamp(14px,3vw,17px);
+  font-weight:700;
+  color:#64748b;
+  margin-bottom:10px;
+}
+.progress-track-wrap{
+  position:relative;
+  height:56px;
+  width:100%;
+}
+.progress-track{
+  position:absolute;
+  top:50%;
+  left:0;
+  right:0;
+  height:16px;
+  transform:translateY(-50%);
+  background:#e2e8f0;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#10b981,#3b82f6,#8b5cf6);
+  border-radius:999px;
+  transition:width .6s cubic-bezier(.34,1.56,.64,1);
+}
+.milestone-wrap{
+  position:absolute;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:22px;
+  line-height:1;
+  transition:transform .3s;
+  z-index:2;
+  pointer-events:none;
+}
+.milestone-wrap.reached{
+  animation:mileBounce .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes mileBounce{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  50%{transform:translate(-50%,-80%) scale(1.5)}
+  100%{transform:translate(-50%,-50%) scale(1.1)}
+}
+.char-wrap{
+  position:absolute;
+  top:50%;
+  transform:translate(-50%,-50%);
+  font-size:34px;
+  line-height:1;
+  transition:left .6s cubic-bezier(.34,1.56,.64,1);
+  z-index:3;
+  pointer-events:none;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
+}
+.char-icon{
+  display:block;
+  animation:charBounce .55s ease-in-out infinite alternate;
+}
+@keyframes charBounce{
+  from{transform:translateY(0) rotate(-8deg);}
+  to{transform:translateY(-6px) rotate(8deg);}
+}
+
+/* ===== CONTENT ===== */
 .content{
   width:100%;
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding:18px 16px 40px;
-  gap:18px;
+  padding:16px 20px 40px;
+  gap:20px;
 }
 .mode-lbl{
-  font-size:clamp(15px,3.5vw,18px);
+  font-size:clamp(16px,3.8vw,20px);
   font-weight:700;
   color:#64748b;
   text-align:center;
@@ -147,8 +231,8 @@ body{
 /* ===== PROBLEM CARD ===== */
 .pcard{
   background:white;
-  border-radius:26px;
-  padding:28px 20px;
+  border-radius:28px;
+  padding:28px 20px 24px;
   width:100%;
   display:flex;
   flex-direction:column;
@@ -159,14 +243,14 @@ body{
 
 /* ===== FORMULA ===== */
 .formula{
-  font-size:clamp(38px,10vw,58px);
+  font-size:clamp(42px,11vw,64px);
   font-weight:900;
   text-align:center;
   color:#1e293b;
   line-height:1.15;
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   flex-wrap:wrap;
   justify-content:center;
 }
@@ -185,23 +269,23 @@ body{
 .ans-ok{color:#059669}
 .ans-no{color:#dc2626;text-decoration:line-through}
 
-/* ===== DOT VISUAL (ten-frame) ===== */
+/* ===== DOT VISUAL ===== */
 .dot-visual{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   flex-wrap:wrap;
   justify-content:center;
 }
 .op-lbl{
-  font-size:clamp(38px,10vw,54px);
+  font-size:clamp(42px,10vw,58px);
   font-weight:900;
   color:#6366f1;
   flex-shrink:0;
   line-height:1;
 }
 .dots-wrap{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;justify-content:center}
-.dots-sep{width:4px;height:56px;background:#e2e8f0;border-radius:2px;align-self:center}
+.dots-sep{width:4px;height:60px;background:#e2e8f0;border-radius:2px;align-self:center}
 .tf{
   display:grid;
   grid-template-columns:repeat(5,1fr);
@@ -213,8 +297,8 @@ body{
   border-radius:12px;
 }
 .dot{
-  width:clamp(22px,5vw,30px);
-  height:clamp(22px,5vw,30px);
+  width:clamp(24px,5vw,32px);
+  height:clamp(24px,5vw,32px);
   border-radius:50%;
   background:#e2e8f0;
   border:2px solid #cbd5e1;
@@ -224,32 +308,89 @@ body{
 .dot-g{background:#10b981;border-color:#047857}
 .dot-o{background:#f59e0b;border-color:#b45309}
 
-/* ===== CHOICE GRID ===== */
-.ch-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  width:100%;
-  max-width:480px;
+/* ===== NUMBER LINE ANSWER INPUT ===== */
+.nl-inst{
+  font-size:clamp(22px,5.5vw,36px);
+  font-weight:800;
+  text-align:center;
+  color:#1e293b;
 }
-.ch-btn{
-  background:#f8fafc;
-  border:3px solid #e2e8f0;
-  border-radius:20px;
-  padding:18px 10px;
-  font-size:clamp(32px,8.5vw,48px);
+.nl-target{color:#7c3aed;font-size:1.2em}
+/* Number line: two rows, no scrolling */
+.nl-rows{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:6px 0;
+}
+.nl-row{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:5px;
+  width:100%;
+}
+.nl-circle{
+  aspect-ratio:1/1;
+  width:100%;
+  border-radius:50%;
+  background:white;
+  border:3px solid #cbd5e1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(14px,3.2vw,20px);
   font-weight:900;
   cursor:pointer;
   font-family:inherit;
-  color:#1e293b;
+  color:#334155;
   touch-action:manipulation;
-  transition:transform .1s,background .1s;
-  line-height:1;
+  transition:transform .12s,background .15s,border-color .15s;
+  box-shadow:0 2px 6px rgba(0,0,0,.08);
   user-select:none;
+  padding:0;
+  min-width:0;
 }
-.ch-btn:active:not(.ch-ok):not(.ch-no){transform:scale(0.92);background:#f1f5f9}
-.ch-ok{background:#d1fae5;border-color:#10b981;color:#065f46}
-.ch-no{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
+.nl-circle:active:not(.nl-ok):not(.nl-no):not(.nl-locked){
+  transform:scale(0.88);
+  background:#f1f5f9;
+}
+.nl-ok{
+  background:#10b981 !important;
+  border-color:#047857 !important;
+  color:white !important;
+  transform:scale(1.25) !important;
+  box-shadow:0 4px 16px rgba(16,185,129,.5) !important;
+}
+.nl-no{
+  background:#ef4444 !important;
+  border-color:#b91c1c !important;
+  color:white !important;
+  animation:shake .5s ease;
+}
+.nl-locked{pointer-events:none;opacity:.7}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+
+/* ===== INLINE FEEDBACK ===== */
+.feedback-inline{
+  font-size:clamp(26px,6.5vw,38px);
+  font-weight:900;
+  text-align:center;
+  animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+  padding:4px 0;
+}
+.fi-ok{color:#059669}
+.fi-no{color:#dc2626}
+@keyframes pop{
+  0%{transform:scale(0.4);opacity:0}
+  100%{transform:scale(1);opacity:1}
+}
 
 /* ===== COMPARE ===== */
 .cmp-row{
@@ -261,35 +402,41 @@ body{
 }
 .cmp-side{display:flex;flex-direction:column;align-items:center;gap:10px}
 .cmp-num{
-  font-size:clamp(52px,14vw,80px);
+  font-size:clamp(54px,14vw,82px);
   font-weight:900;
   line-height:1;
   color:#1e293b;
 }
 .cmp-mid{
-  font-size:clamp(38px,10vw,60px);
+  font-size:clamp(40px,10vw,62px);
   font-weight:900;
   color:#94a3b8;
-  width:clamp(58px,14vw,78px);
-  height:clamp(58px,14vw,78px);
+  width:clamp(62px,14vw,82px);
+  height:clamp(62px,14vw,82px);
   display:flex;
   align-items:center;
   justify-content:center;
   border:3px dashed #cbd5e1;
-  border-radius:16px;
+  border-radius:18px;
   background:#f8fafc;
   flex-shrink:0;
 }
 .cmp-mid.ok{color:#059669;background:#d1fae5;border-color:#10b981;border-style:solid}
 .cmp-mid.no{color:#dc2626;background:#fee2e2;border-color:#ef4444;border-style:solid}
-.cmp-btns{display:flex;gap:12px;width:100%;max-width:480px;justify-content:center}
+.cmp-btns{
+  display:flex;
+  gap:14px;
+  width:100%;
+  max-width:500px;
+  justify-content:center;
+}
 .cmp-btn{
   flex:1;
-  max-width:140px;
+  max-width:150px;
   background:#f8fafc;
   border:3px solid #e2e8f0;
-  border-radius:20px;
-  padding:14px 8px;
+  border-radius:22px;
+  padding:16px 8px;
   cursor:pointer;
   font-family:inherit;
   display:flex;
@@ -299,102 +446,83 @@ body{
   touch-action:manipulation;
   transition:transform .1s;
   user-select:none;
+  min-height:88px;
 }
-.cmp-btn:active{transform:scale(0.92)}
-.cmp-sym{font-size:clamp(36px,9vw,52px);font-weight:900;color:#1e293b;line-height:1}
-.cmp-lbl{font-size:13px;font-weight:700;color:#94a3b8}
+.cmp-btn:active{transform:scale(0.90)}
+.cmp-sym{font-size:clamp(38px,9vw,54px);font-weight:900;color:#1e293b;line-height:1}
+.cmp-lbl{font-size:clamp(12px,2.5vw,14px);font-weight:700;color:#94a3b8}
 .cmp-btn.ch-ok{background:#d1fae5;border-color:#10b981}
 .cmp-btn.ch-ok .cmp-sym{color:#059669}
 .cmp-btn.ch-no{background:#fee2e2;border-color:#ef4444}
 .cmp-btn.ch-no .cmp-sym{color:#dc2626}
+.cmp-btn.nl-no{animation:shake .5s ease}
 
-/* ===== NUMBER LINE ===== */
-.nl-inst{
-  font-size:clamp(22px,5.5vw,34px);
-  font-weight:800;
+/* ===== COMPLETION SCREEN ===== */
+.done-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:24px;
+  padding:40px 24px 60px;
+  width:100%;
   text-align:center;
+}
+.done-emoji{
+  font-size:clamp(72px,18vw,100px);
+  animation:pop .6s cubic-bezier(.34,1.56,.64,1);
+}
+.done-title{
+  font-size:clamp(32px,8vw,52px);
+  font-weight:900;
+  color:#4c1d95;
+  line-height:1.1;
+}
+.done-score{
+  font-size:clamp(24px,6vw,36px);
+  font-weight:800;
   color:#1e293b;
 }
-.nl-target{color:#7c3aed;font-size:1.3em}
-.nl-outer{
-  width:100%;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:14px 0;
-  cursor:grab;
+.done-stars{
+  font-size:clamp(42px,10vw,60px);
+  letter-spacing:4px;
+  animation:pop .5s .2s both cubic-bezier(.34,1.56,.64,1);
 }
-.nl-outer:active{cursor:grabbing}
-.nl{
+.done-btns{
   display:flex;
-  align-items:center;
-  width:max-content;
-  padding:8px 20px;
-}
-.nl-circle{
-  width:clamp(40px,8vw,50px);
-  height:clamp(40px,8vw,50px);
-  border-radius:50%;
-  background:white;
-  border:3px solid #cbd5e1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:clamp(14px,3.5vw,19px);
-  font-weight:800;
-  cursor:pointer;
-  font-family:inherit;
-  color:#334155;
-  touch-action:manipulation;
-  transition:transform .1s,background .15s;
-  flex-shrink:0;
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
-}
-.nl-circle:active:not(.nl-ok):not(.nl-no){transform:scale(0.88)}
-.nl-ok{background:#10b981;border-color:#047857;color:white;transform:scale(1.2);box-shadow:0 4px 12px rgba(16,185,129,.4)}
-.nl-no{background:#ef4444;border-color:#b91c1c;color:white}
-.nl-conn{height:4px;width:clamp(6px,1.5vw,12px);background:#cbd5e1;flex-shrink:0}
-
-/* ===== FEEDBACK ===== */
-.feedback{
+  flex-direction:column;
+  gap:14px;
   width:100%;
-  max-width:480px;
-  padding:18px 24px;
-  border-radius:20px;
-  font-size:clamp(20px,5vw,28px);
-  font-weight:800;
-  text-align:center;
-  animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+  max-width:360px;
 }
-.fb-ok{background:#d1fae5;color:#065f46}
-.fb-no{background:#fee2e2;color:#7f1d1d}
-
-@keyframes pop{
-  0%{transform:scale(0.5);opacity:0}
-  100%{transform:scale(1);opacity:1}
-}
-
-/* ===== NEXT BUTTON ===== */
-.next-btn{
-  background:linear-gradient(135deg,#7c3aed,#4f46e5);
-  color:white;
+.done-btn{
   border:none;
-  border-radius:20px;
-  padding:18px 52px;
+  border-radius:22px;
+  padding:20px 40px;
   font-size:clamp(20px,5vw,26px);
   font-weight:800;
   cursor:pointer;
   font-family:inherit;
-  box-shadow:0 4px 18px rgba(124,58,237,.4);
   touch-action:manipulation;
   transition:transform .1s,opacity .1s;
-  user-select:none;
 }
-.next-btn:active{transform:scale(0.95);opacity:.92}
+.done-btn:active{transform:scale(0.95);opacity:.92}
+.done-btn-primary{
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  color:white;
+  box-shadow:0 4px 18px rgba(124,58,237,.4);
+}
+.done-btn-secondary{
+  background:white;
+  color:#334155;
+  border:3px solid #e2e8f0;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
 
 /* ===== RESPONSIVE ===== */
-@media(max-width:380px){
+@media(max-width:420px){
   .act-grid{grid-template-columns:1fr}
   .ac.full{grid-column:1}
+  .cmp-btns{gap:8px}
 }
 </style>
 </head>
@@ -404,15 +532,40 @@ body{
 'use strict';
 
 /* ============================================================
-   STATE
+   CONSTANTS & STATE
 ============================================================ */
+const TOTAL = 20;
+const CHAR_MIN_PCT = 3;    // keep progress character inside track bounds
+const CHAR_MAX_PCT = 97;
+const STAR3_THRESHOLD = 0.85;
+const STAR2_THRESHOLD = 0.60;
+
+// Character that marches along the progress bar (changes at milestones)
+function progressChar(n){
+  if(n >= TOTAL) return '🏆';
+  if(n >= 15)   return '🌟';
+  if(n >= 10)   return '🚀';
+  if(n >= 5)    return '🐇';
+  return '🐢';
+}
+
+const MILESTONES = [
+  {pct:25, icon:'🌱', at:5},
+  {pct:50, icon:'🌻', at:10},
+  {pct:75, icon:'🌈', at:15},
+  {pct:100,icon:'🏆', at:20},
+];
+
 const S = {
-  screen: 'home',
-  score: 0,
-  streak: 0,
-  answered: null,   // null | true | false
-  selected: null,
-  problem: null,
+  screen:     'home',   // 'home' | mode name | 'done'
+  mode:       null,
+  score:      0,        // total cumulative score (shown on home screen)
+  gameScore:  0,        // score for the current 20-problem session
+  streak:     0,
+  problem:    null,
+  problemNum: 0,        // how many problems answered correctly so far (0..TOTAL)
+  locked:     false,    // prevent interaction during animation
+  lastWrong:  null,     // last wrong value selected (for brief red flash)
 };
 
 /* ============================================================
@@ -429,30 +582,15 @@ function shuffle(arr){
   return a;
 }
 
-function makeChoices(correct, min=0, max=20){
-  const wrongs=new Set();
-  // Prefer nearby values so they are plausible distractors
-  for(let d=1; d<=6 && wrongs.size<3; d++){
-    if(Math.random()<.75 && correct+d<=max) wrongs.add(correct+d);
-    if(wrongs.size<3 && Math.random()<.75 && correct-d>=min) wrongs.add(correct-d);
-  }
-  // Fill if still not 3
-  for(let d=1; wrongs.size<3 && d<=22; d++){
-    if(correct+d<=max && !wrongs.has(correct+d)) wrongs.add(correct+d);
-    if(wrongs.size<3 && correct-d>=min && !wrongs.has(correct-d)) wrongs.add(correct-d);
-  }
-  return shuffle([correct,...[...wrongs].slice(0,3)]);
-}
-
 function celebrate(big){
   if(big){
-    const end=Date.now()+2500;
+    const end=Date.now()+2200;
     (function frame(){
-      confetti({particleCount:35,spread:150,origin:{x:Math.random(),y:Math.random()*.55}});
+      confetti({particleCount:40,spread:160,origin:{x:Math.random(),y:Math.random()*.5}});
       if(Date.now()<end) requestAnimationFrame(frame);
     })();
   } else {
-    confetti({particleCount:55,spread:85,origin:{x:.5,y:.65},
+    confetti({particleCount:50,spread:80,origin:{x:.5,y:.65},
       colors:['#FF6B6B','#4ECDC4','#FFE66D','#A8E6CF','#C3B1E1']});
   }
 }
@@ -466,8 +604,6 @@ function el(tag, cls, text){
 
 /* ============================================================
    TEN-FRAME VISUALIZATION
-   Represents a number as a 5×2 grid of filled/empty dots.
-   Numbers 1–10: single frame; 11–20: two frames.
 ============================================================ */
 function makeTenFrame(n, colorCls){
   const frame=el('div','tf');
@@ -484,9 +620,36 @@ function makeDotsVisual(n, col1='dot-r', col2='dot-b'){
     wrap.appendChild(makeTenFrame(n,col1));
   } else {
     wrap.appendChild(makeTenFrame(10,col1));
-    const sep=el('div','dots-sep');
-    wrap.appendChild(sep);
+    wrap.appendChild(el('div','dots-sep'));
     wrap.appendChild(makeTenFrame(n-10,col2));
+  }
+  return wrap;
+}
+
+/* Ten-frame for subtraction: shows 'a' total dots with first 'a-b' colored
+   (the "remaining" answer) and the last 'b' grey (the "taken away" part). */
+function makeSubtractDotsVisual(a, b, col){
+  const answer=a-b;
+  const wrap=el('div','dots-wrap');
+  function subtractFrame(frameStart){
+    const frame=el('div','tf');
+    for(let i=0;i<10;i++){
+      const pos=frameStart+i;
+      let cls='dot';
+      if(pos<a){
+        if(pos<answer) cls+=' '+col; // remaining (colored)
+        // else: grey = "taken away"
+      }
+      frame.appendChild(el('div',cls));
+    }
+    return frame;
+  }
+  if(a<=10){
+    wrap.appendChild(subtractFrame(0));
+  } else {
+    wrap.appendChild(subtractFrame(0));
+    wrap.appendChild(el('div','dots-sep'));
+    wrap.appendChild(subtractFrame(10));
   }
   return wrap;
 }
@@ -496,80 +659,200 @@ function makeDotsVisual(n, col1='dot-r', col2='dot-b'){
 ============================================================ */
 function genAddition(){
   let a,b;
-  do{ a=rnd(0,10); b=rnd(0,10); } while(a+b>20);
-  const answer=a+b;
-  return {type:'add', a, b, answer, choices:makeChoices(answer)};
+  do{ a=rnd(1,10); b=rnd(1,10); } while(a+b>20);
+  return {type:'add', a, b, answer:a+b};
 }
 
 function genSubtraction(){
-  const answer=rnd(0,10);
-  const b=rnd(0,10);
+  const answer=rnd(1,10);
+  const b=rnd(1,10);
   const a=answer+b;
   if(a>20) return genSubtraction();
-  return {type:'sub', a, b, answer, choices:makeChoices(answer)};
+  return {type:'sub', a, b, answer};
+}
+
+function genMixed(){
+  return Math.random()<.5 ? {...genAddition(), type:'mixed-add'} : {...genSubtraction(), type:'mixed-sub'};
 }
 
 function genMissing(){
-  // variant 0: a + ? = c
-  // variant 1: ? + b = c
-  // variant 2: a − ? = c
   const vt=rnd(0,2);
   let a=null, b=null, c, answer;
   if(vt===0){
-    a=rnd(0,15); answer=rnd(0,20-a); c=a+answer;
+    a=rnd(1,15); answer=rnd(1,20-a); c=a+answer;
   } else if(vt===1){
-    b=rnd(0,15); answer=rnd(0,20-b); c=answer+b;
+    b=rnd(1,15); answer=rnd(1,20-b); c=answer+b;
   } else {
-    c=rnd(0,10); answer=rnd(0,10); a=c+answer;
+    c=rnd(1,9); answer=rnd(1,10); a=c+answer;
     if(a>20) return genMissing();
   }
-  return {type:'missing', vt, a, b, c, answer, choices:makeChoices(answer)};
+  return {type:'missing', vt, a, b, c, answer};
 }
 
 function genCompare(){
-  const a=rnd(0,20), b=rnd(0,20);
+  const a=rnd(1,20), b=rnd(1,20);
   const answer=a>b?'>':a<b?'<':'=';
   return {type:'compare', a, b, answer};
 }
 
 function genNumberLine(){
-  const target=rnd(0,20);
+  const target=rnd(1,20);
   return {type:'nl', target, answer:target};
 }
 
 function genProblem(mode){
-  return {addition:genAddition, subtraction:genSubtraction,
-          missing:genMissing, compare:genCompare, numberline:genNumberLine}[mode]();
+  const gen = {
+    addition:   genAddition,
+    subtraction:genSubtraction,
+    mixed:      genMixed,
+    missing:    genMissing,
+    compare:    genCompare,
+    numberline: genNumberLine,
+  };
+  return gen[mode]();
 }
 
 /* ============================================================
-   ANSWER HANDLER
+   ANSWER HANDLERS
 ============================================================ */
-function doAnswer(selected, correct){
-  S.selected=selected;
-  const ok = selected===correct;
-  S.answered=ok;
-  if(ok){ S.score++; S.streak++; celebrate(S.streak>=5); }
-  else { S.streak=0; }
-  render();
+function handleNumberAnswer(val){
+  if(S.locked) return;
+  const correct = S.problem.type==='nl' ? S.problem.target : S.problem.answer;
+  if(val===correct){
+    S.locked=true;
+    S.score++;
+    S.gameScore++;
+    S.streak++;
+    S.problemNum++;
+    S.lastWrong=null;
+    celebrate(S.streak>=5);
+    render(); // show green
+    setTimeout(()=>{
+      S.locked=false;
+      if(S.problemNum>=TOTAL){
+        S.screen='done';
+      } else {
+        S.problem=genProblem(S.mode);
+      }
+      render();
+    }, 1300);
+  } else {
+    S.locked=true;
+    S.streak=0;
+    S.lastWrong=val;
+    render(); // show red on wrong number
+    setTimeout(()=>{
+      S.locked=false;
+      S.lastWrong=null;
+      render(); // return to normal, same problem
+    }, 700);
+  }
+}
+
+function handleCompareAnswer(sym){
+  if(S.locked) return;
+  const correct=S.problem.answer;
+  if(sym===correct){
+    S.locked=true;
+    S.score++;
+    S.gameScore++;
+    S.streak++;
+    S.problemNum++;
+    S.lastWrong=null;
+    celebrate(S.streak>=5);
+    render();
+    setTimeout(()=>{
+      S.locked=false;
+      if(S.problemNum>=TOTAL){
+        S.screen='done';
+      } else {
+        S.problem=genProblem(S.mode);
+      }
+      render();
+    }, 1300);
+  } else {
+    S.locked=true;
+    S.streak=0;
+    S.lastWrong=sym;
+    render();
+    setTimeout(()=>{
+      S.locked=false;
+      S.lastWrong=null;
+      render();
+    }, 700);
+  }
 }
 
 /* ============================================================
-   CHOICE GRID (multiple-choice number buttons)
+   PROGRESS BAR
 ============================================================ */
-function makeChoiceGrid(choices, correct, onClickFn){
-  const grid=el('div','ch-grid');
-  choices.forEach(c=>{
-    const btn=el('button','ch-btn',c);
-    if(onClickFn===null){
-      if(c===correct) btn.classList.add('ch-ok');
-      else if(c===S.selected) btn.classList.add('ch-no');
-    } else {
-      btn.addEventListener('click',()=>onClickFn(c));
-    }
-    grid.appendChild(btn);
+function renderProgressBar(parent){
+  const sec=el('div','progress-section');
+  const lbl=el('div','progress-label',`Správně: ${S.problemNum} / ${TOTAL}`);
+  sec.appendChild(lbl);
+
+  const trackWrap=el('div','progress-track-wrap');
+
+  const track=el('div','progress-track');
+  const fill=el('div','progress-fill');
+  fill.style.width=(S.problemNum/TOTAL*100)+'%';
+  track.appendChild(fill);
+  trackWrap.appendChild(track);
+
+  // Milestones
+  MILESTONES.forEach(m=>{
+    const ms=el('div','milestone-wrap');
+    ms.style.left=m.pct+'%';
+    ms.textContent=m.icon;
+    if(S.problemNum>=m.at) ms.classList.add('reached');
+    trackWrap.appendChild(ms);
   });
-  return grid;
+
+  // Walking character
+  const charWrap=el('div','char-wrap');
+  const pct=Math.min(100, S.problemNum/TOTAL*100);
+  // Keep character at least CHAR_MIN_PCT in and at most CHAR_MAX_PCT so it doesn't clip
+  charWrap.style.left=Math.max(CHAR_MIN_PCT,Math.min(CHAR_MAX_PCT,pct))+'%';
+  const icon=el('span','char-icon',progressChar(S.problemNum));
+  charWrap.appendChild(icon);
+  trackWrap.appendChild(charWrap);
+
+  sec.appendChild(trackWrap);
+  parent.appendChild(sec);
+}
+
+/* ============================================================
+   NUMBER LINE INPUT (shared by add/sub/mixed/missing/nl modes)
+============================================================ */
+function renderNumberLine(parent, correctAnswer){
+  // True when the user just answered correctly (locked + no wrong selection pending)
+  const isJustAnsweredCorrectly = S.locked && S.lastWrong===null && S.problemNum>0;
+
+  const rows=el('div','nl-rows');
+
+  function makeCircle(i){
+    const circle=el('button','nl-circle',i);
+    if(S.locked){
+      circle.classList.add('nl-locked');
+      if(i===correctAnswer && isJustAnsweredCorrectly) circle.classList.add('nl-ok');
+      if(i===S.lastWrong) circle.classList.add('nl-no');
+    } else {
+      circle.addEventListener('click',()=>handleNumberAnswer(i));
+    }
+    return circle;
+  }
+
+  // Row 1: 1–10
+  const row1=el('div','nl-row');
+  for(let i=1;i<=10;i++) row1.appendChild(makeCircle(i));
+  rows.appendChild(row1);
+
+  // Row 2: 11–20
+  const row2=el('div','nl-row');
+  for(let i=11;i<=20;i++) row2.appendChild(makeCircle(i));
+  rows.appendChild(row2);
+
+  parent.appendChild(rows);
 }
 
 /* ============================================================
@@ -578,18 +861,16 @@ function makeChoiceGrid(choices, correct, onClickFn){
 function render(){
   const root=document.getElementById('root');
   root.innerHTML='';
-  if(S.screen==='home') renderHome(root);
-  else renderActivity(root);
+  if(S.screen==='home')        renderHome(root);
+  else if(S.screen==='done')   renderDone(root);
+  else                         renderActivity(root);
 }
 
 /* ----- HOME ----- */
 function renderHome(root){
   const wrap=el('div','home-wrap');
-
-  const title=el('div','home-title','🔢 Matematika');
-  const sub=el('div','home-sub','Počítání do 20  •  1. třída');
-  wrap.appendChild(title);
-  wrap.appendChild(sub);
+  wrap.appendChild(el('div','home-title','🔢 Matematika'));
+  wrap.appendChild(el('div','home-sub','Počítání do 20  •  1. třída'));
 
   if(S.score>0){
     wrap.appendChild(el('div','score-pill',`⭐ ${S.score} bodů`));
@@ -597,18 +878,25 @@ function renderHome(root){
 
   const grid=el('div','act-grid');
   [
-    {mode:'addition',    icon:'➕', name:'Sčítání',           hint:'do 20',         cls:'ac-green'},
-    {mode:'subtraction', icon:'➖', name:'Odčítání',          hint:'do 20',         cls:'ac-blue'},
-    {mode:'compare',     icon:'⚖️', name:'Porovnávání',       hint:'více • méně',   cls:'ac-orange'},
-    {mode:'missing',     icon:'❓', name:'Chybějící číslo',   hint:'5 + ? = 8',     cls:'ac-purple'},
-    {mode:'numberline',  icon:'📏', name:'Číselná osa',       hint:'kde je číslo?', cls:'ac-pink full'},
+    {mode:'addition',    icon:'➕', name:'Sčítání',             hint:'příklady do 20',           cls:'ac-green'},
+    {mode:'subtraction', icon:'➖', name:'Odčítání',            hint:'příklady do 20',           cls:'ac-blue'},
+    {mode:'mixed',       icon:'➕➖',name:'Sčítání + Odčítání', hint:'oba druhy dohromady',      cls:'ac-teal'},
+    {mode:'missing',     icon:'❓', name:'Chybějící číslo',     hint:'5 + ? = 8',               cls:'ac-purple'},
+    {mode:'compare',     icon:'⚖️', name:'Porovnávání',         hint:'více • méně • stejně',     cls:'ac-orange'},
+    {mode:'numberline',  icon:'📏', name:'Číselná osa',         hint:'kde je číslo?',            cls:'ac-pink full'},
   ].forEach(a=>{
     const card=el('div',`ac ${a.cls}`);
     card.innerHTML=`<div class="ac-icon">${a.icon}</div>`+
       `<div class="ac-name">${a.name}</div>`+
       `<div class="ac-hint">${a.hint}</div>`;
     card.addEventListener('click',()=>{
-      S.screen=a.mode; S.answered=null; S.selected=null;
+      S.screen=a.mode;
+      S.mode=a.mode;
+      S.problemNum=0;
+      S.gameScore=0;
+      S.locked=false;
+      S.lastWrong=null;
+      S.streak=0;
       S.problem=genProblem(a.mode);
       render();
     });
@@ -621,80 +909,88 @@ function renderHome(root){
 
 /* ----- ACTIVITY WRAPPER ----- */
 function renderActivity(root){
-  // Sticky top bar
+  // Top bar
   const bar=el('div','top-bar');
   const back=el('button','back-btn','← Domů');
-  back.addEventListener('click',()=>{ S.screen='home'; S.answered=null; render(); });
+  back.addEventListener('click',()=>{ S.screen='home'; S.locked=false; render(); });
   const scoreTxt=S.streak>=3 ? `⭐ ${S.score}  🔥 ${S.streak}` : `⭐ ${S.score}`;
   bar.appendChild(back);
-  bar.appendChild(el('div','score-pill',scoreTxt));
+  bar.appendChild(el('div','score-bar-pill',scoreTxt));
   root.appendChild(bar);
+
+  // Progress bar
+  renderProgressBar(root);
 
   const content=el('div','content');
   root.appendChild(content);
 
   const p=S.problem;
-  if(p.type==='add'||p.type==='sub')  renderAddSub(content,p);
-  else if(p.type==='missing')          renderMissing(content,p);
-  else if(p.type==='compare')          renderCompare(content,p);
-  else if(p.type==='nl')               renderNL(content,p);
-
-  // Feedback + Next button after answering
-  if(S.answered!==null){
-    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně tak!','🥳 Bravo!','👏 Super!'];
-    const fb=el('div','feedback '+(S.answered?'fb-ok':'fb-no'));
-    if(S.answered){
-      fb.textContent=OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)];
-    } else {
-      const ans=p.type==='nl'?p.target:p.answer;
-      fb.innerHTML=`💡 Správná odpověď je <strong>${ans}</strong>`;
-    }
-    content.appendChild(fb);
-
-    const nxt=el('button','next-btn','→ Další otázka');
-    nxt.addEventListener('click',()=>{
-      S.problem=genProblem(S.screen); S.answered=null; S.selected=null; render();
-    });
-    content.appendChild(nxt);
+  if(p.type==='add' || p.type==='sub' || p.type==='mixed-add' || p.type==='mixed-sub'){
+    renderAddSub(content, p);
+  } else if(p.type==='missing'){
+    renderMissing(content, p);
+  } else if(p.type==='compare'){
+    renderCompare(content, p);
+  } else if(p.type==='nl'){
+    renderNL(content, p);
   }
 }
 
-/* ----- ADDITION / SUBTRACTION ----- */
+/* ----- ADDITION / SUBTRACTION / MIXED ----- */
 function renderAddSub(content, p){
-  const isAdd=p.type==='add';
-  content.appendChild(el('div','mode-lbl',isAdd?'➕ Sčítání':'➖ Odčítání'));
+  const isAdd = p.type==='add' || p.type==='mixed-add';
+  const modeLabels = {
+    add:'➕ Sčítání', sub:'➖ Odčítání',
+    'mixed-add':'➕ Sčítání', 'mixed-sub':'➖ Odčítání'
+  };
+  const overallLabel = S.mode==='mixed' ? '➕➖ Sčítání + Odčítání' : modeLabels[p.type];
+  content.appendChild(el('div','mode-lbl', overallLabel));
 
   const card=el('div','pcard');
 
   // Ten-frame dot visualization
   const dv=el('div','dot-visual');
-  dv.appendChild(makeDotsVisual(p.a,'dot-r','dot-r'));
-  const opEl=el('div','op-lbl',isAdd?'+':'−');
-  dv.appendChild(opEl);
-  dv.appendChild(makeDotsVisual(p.b,'dot-b','dot-b'));
+  if(isAdd){
+    dv.appendChild(makeDotsVisual(p.a,'dot-r','dot-r'));
+    dv.appendChild(el('div','op-lbl','+'));
+    dv.appendChild(makeDotsVisual(p.b,'dot-b','dot-b'));
+  } else {
+    // Take-away visual: a total dots, answer colored, b grey ("removed")
+    dv.appendChild(makeSubtractDotsVisual(p.a, p.b, 'dot-r'));
+  }
   card.appendChild(dv);
 
   // Text formula
   const formula=el('div','formula');
-  const resultSpan=document.createElement('span');
-  if(S.answered!==null){
-    resultSpan.className='mbox';
-    const inner=document.createElement('span');
-    inner.className=S.answered?'ans-ok':'ans-no';
-    inner.textContent=p.answer;
+  const resultSpan=el('span','mbox');
+  // Show green answer after correct, or '?' when unanswered
+  if(S.locked && S.lastWrong===null){
+    const inner=el('span','ans-ok',p.answer);
     resultSpan.appendChild(inner);
   } else {
-    resultSpan.className='mbox';
     resultSpan.textContent='?';
   }
   formula.appendChild(document.createTextNode(`${p.a} ${isAdd?'+':'−'} ${p.b} = `));
   formula.appendChild(resultSpan);
   card.appendChild(formula);
+
+  // Inline feedback after wrong attempt
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!','🥳 Bravo!','👏 Super!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
+  }
+
   content.appendChild(card);
 
-  content.appendChild(
-    makeChoiceGrid(p.choices, p.answer, S.answered===null ? (v)=>doAnswer(v,p.answer) : null)
-  );
+  // Hint label
+  const hintLbl=el('div','mode-lbl');
+  hintLbl.style.marginTop='-4px';
+  hintLbl.textContent='👇 Klikni na správné číslo';
+  content.appendChild(hintLbl);
+
+  renderNumberLine(content, p.answer);
 }
 
 /* ----- MISSING NUMBER ----- */
@@ -708,9 +1004,8 @@ function renderMissing(content, p){
   function opNode(s){ const sp=el('span',null,s); sp.style.color='#6366f1'; return sp; }
   function missingNode(){
     const box=el('span','mbox');
-    if(S.answered!==null){
-      const inner=el('span',S.answered?'ans-ok':'ans-no',p.answer);
-      box.appendChild(inner);
+    if(S.locked && S.lastWrong===null){
+      box.appendChild(el('span','ans-ok',p.answer));
     } else {
       box.textContent='?';
     }
@@ -719,7 +1014,6 @@ function renderMissing(content, p){
   function eqNode(){ const sp=el('span',null,'='); sp.style.color='#10b981'; return sp; }
 
   if(p.vt===0){
-    // a + ? = c
     formula.appendChild(numNode(p.a));
     formula.appendChild(document.createTextNode(' '));
     formula.appendChild(opNode('+'));
@@ -729,7 +1023,6 @@ function renderMissing(content, p){
     formula.appendChild(eqNode());
     formula.appendChild(document.createTextNode(` ${p.c}`));
   } else if(p.vt===1){
-    // ? + b = c
     formula.appendChild(missingNode());
     formula.appendChild(document.createTextNode(' '));
     formula.appendChild(opNode('+'));
@@ -737,7 +1030,6 @@ function renderMissing(content, p){
     formula.appendChild(eqNode());
     formula.appendChild(document.createTextNode(` ${p.c}`));
   } else {
-    // a − ? = c
     formula.appendChild(numNode(p.a));
     formula.appendChild(document.createTextNode(' '));
     formula.appendChild(opNode('−'));
@@ -749,11 +1041,22 @@ function renderMissing(content, p){
   }
 
   card.appendChild(formula);
+
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!','🥳 Bravo!','👏 Super!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
+  }
+
   content.appendChild(card);
 
-  content.appendChild(
-    makeChoiceGrid(p.choices, p.answer, S.answered===null ? (v)=>doAnswer(v,p.answer) : null)
-  );
+  const hintLbl=el('div','mode-lbl');
+  hintLbl.style.marginTop='-4px';
+  hintLbl.textContent='👇 Klikni na správné číslo';
+  content.appendChild(hintLbl);
+
+  renderNumberLine(content, p.answer);
 }
 
 /* ----- COMPARE ----- */
@@ -773,79 +1076,106 @@ function renderCompare(content, p){
   row.appendChild(side(p.a,'dot-r'));
 
   const mid=el('div','cmp-mid');
-  if(S.answered!==null){
+  if(S.locked && S.lastWrong===null){
     mid.textContent=p.answer;
-    mid.classList.add(S.answered?'ok':'no');
+    mid.classList.add('ok');
+  } else if(S.locked && S.lastWrong!==null){
+    mid.textContent=S.lastWrong;
+    mid.classList.add('no');
   } else {
     mid.textContent='?';
   }
   row.appendChild(mid);
-
   row.appendChild(side(p.b,'dot-b'));
   card.appendChild(row);
+
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
+  }
+
   content.appendChild(card);
 
-  const btnRow=el('div','cmp-btns');
-  [
-    {sym:'<', lbl:'méně'},
-    {sym:'=', lbl:'stejně'},
-    {sym:'>', lbl:'více'},
-  ].forEach(opt=>{
-    const btn=el('div','cmp-btn');
-    btn.appendChild(el('span','cmp-sym',opt.sym));
-    btn.appendChild(el('span','cmp-lbl',opt.lbl));
-    if(S.answered===null){
-      btn.addEventListener('click',()=>doAnswer(opt.sym,p.answer));
-    } else {
-      if(opt.sym===p.answer) btn.classList.add('ch-ok');
-      else if(opt.sym===S.selected) btn.classList.add('ch-no');
-    }
-    btnRow.appendChild(btn);
-  });
-  content.appendChild(btnRow);
+  if(!S.locked || S.lastWrong!==null){
+    const btnRow=el('div','cmp-btns');
+    [{sym:'<',lbl:'méně'},{sym:'=',lbl:'stejně'},{sym:'>',lbl:'více'}].forEach(opt=>{
+      const btn=el('div','cmp-btn');
+      btn.appendChild(el('span','cmp-sym',opt.sym));
+      btn.appendChild(el('span','cmp-lbl',opt.lbl));
+      if(S.locked && opt.sym===S.lastWrong) btn.classList.add('nl-no');
+      if(!S.locked){
+        btn.addEventListener('click',()=>handleCompareAnswer(opt.sym));
+      } else {
+        btn.style.opacity='0.6';
+        btn.style.pointerEvents='none';
+      }
+      btnRow.appendChild(btn);
+    });
+    content.appendChild(btnRow);
+  }
 }
 
-/* ----- NUMBER LINE ----- */
+/* ----- NUMBER LINE FIND ----- */
 function renderNL(content, p){
   content.appendChild(el('div','mode-lbl','📏 Číselná osa'));
 
   const card=el('div','pcard');
-
   const inst=el('div','nl-inst');
   inst.innerHTML=`Kde je číslo <span class="nl-target">${p.target}</span>?`;
   card.appendChild(inst);
 
-  const outer=el('div','nl-outer');
-  const nl=el('div','nl');
-
-  for(let i=0;i<=20;i++){
-    if(i>0){
-      nl.appendChild(el('div','nl-conn'));
-    }
-    const circle=el('button','nl-circle',i);
-    if(S.answered!==null){
-      if(i===p.target) circle.classList.add('nl-ok');
-      else if(i===S.selected) circle.classList.add('nl-no');
-    } else {
-      circle.addEventListener('click',()=>{
-        doAnswer(i,p.target);
-      });
-    }
-    nl.appendChild(circle);
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
   }
 
-  outer.appendChild(nl);
-  card.appendChild(outer);
   content.appendChild(card);
 
-  // After render: scroll to reveal the target number
-  setTimeout(()=>{
-    const circles=nl.querySelectorAll('.nl-circle');
-    const idx=p.target;
-    if(circles[idx]){
-      circles[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
-    }
-  },80);
+  const hintLbl=el('div','mode-lbl');
+  hintLbl.style.marginTop='-4px';
+  hintLbl.textContent='👇 Klikni na správné číslo';
+  content.appendChild(hintLbl);
+
+  renderNumberLine(content, p.target);
+}
+
+/* ----- COMPLETION SCREEN ----- */
+function renderDone(root){
+  const wrap=el('div','done-wrap');
+  const pct=S.gameScore/TOTAL;
+  const emoji = pct>=.9?'🏆':pct>=.7?'🎉':pct>=.5?'😊':'💪';
+  wrap.appendChild(el('div','done-emoji',emoji));
+  wrap.appendChild(el('div','done-title','Hotovo!'));
+  wrap.appendChild(el('div','done-score',`Správně: ${S.gameScore} z ${TOTAL}`));
+
+  const stars = pct>=STAR3_THRESHOLD?'⭐⭐⭐':pct>=STAR2_THRESHOLD?'⭐⭐':'⭐';
+  wrap.appendChild(el('div','done-stars',stars));
+
+  const btns=el('div','done-btns');
+
+  const again=el('button','done-btn done-btn-primary','🔄 Hrát znovu');
+  again.addEventListener('click',()=>{
+    S.screen=S.mode;
+    S.problemNum=0;
+    S.gameScore=0;
+    S.streak=0;
+    S.locked=false;
+    S.lastWrong=null;
+    S.problem=genProblem(S.mode);
+    render();
+  });
+  btns.appendChild(again);
+
+  const home=el('button','done-btn done-btn-secondary','🏠 Domů');
+  home.addEventListener('click',()=>{ S.screen='home'; render(); });
+  btns.appendChild(home);
+
+  wrap.appendChild(btns);
+  root.appendChild(wrap);
 }
 
 /* ============================================================

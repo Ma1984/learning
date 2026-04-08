@@ -1,21 +1,50 @@
-// Updated renderAddSub function to remove the dot visualization for addition/subtraction
+<html>
+<head>
+<style>
+/* Remaining CSS styles */
+.feedback { color: #4CAF50; }
+.hint { color: #FF9800; }
+.number-line { position: relative; width: 100%; height: 50px; border-top: 2px solid black; }
+/* Removed unused CSS for dot visualization */
+</style>
+</head>
+<body>
+<script>
+function renderAddSub(content, p) {
+    // Formula rendering
+    p.innerHTML = content.formula;
 
-function renderAddSub() {
-    // Previous code... (for context)
+    // Feedback rendering
+    if (content.feedback) {
+        var feedbackElement = document.createElement('div');
+        feedbackElement.className = 'feedback';
+        feedbackElement.innerText = content.feedback;
+        p.appendChild(feedbackElement);
+    }
 
-    // Removed dot visualization code
-    
-    // Previous code continues... (keep formula, feedback, etc.)
+    // Hint rendering
+    if (content.hint) {
+        var hintElement = document.createElement('div');
+        hintElement.className = 'hint';
+        hintElement.innerText = content.hint;
+        p.appendChild(hintElement);
+    }
+
+    // Number line rendering
+    var numberLine = document.createElement('div');
+    numberLine.className = 'number-line';
+    // Render the number line logic here
+    p.appendChild(numberLine);
 }
 
-// CSS updates to remove unused classes
+// Modified compare mode function to use simple text-only display if needed
+function renderCompare(content) {
+    var compareElement = document.createElement('div');
+    compareElement.innerText = content.compareNumbers.join(' vs ');
+    return compareElement;
+}
 
-/* Removed CSS for these classes as they are now unused */
-
-/* .dot-visual, .op-lbl, .dots-wrap, .dots-sep, .tf, .dot, .dot-* { ... } */
-
-// JS Functions
-
-// Removed makeTenFrame, makeDotsVisual, animateSubtractionTenFrame as they are unused now
-
-// Keep makeDotsVisual if still needed for compare mode
+// Removed JS helper functions makeTenFrame, makeDotsVisual, animateSubtractionTenFrame
+</script>
+</body>
+</html>

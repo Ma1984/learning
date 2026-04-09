@@ -376,16 +376,12 @@ function checkAnswer() {
   if (isCorrect) {
     quiz.correct++;
     input.classList.add("correct");
-    feedbackBox.className = "feedback-box correct";
-    feedbackText.textContent = "✅ Správně! Výborně! 🎉";
-    feedbackDetail.textContent = "";
     confetti({particleCount:80,spread:100,origin:{y:0.6},colors:['#4ade80','#fbbf24','#60a5fa']});
-    btnNext.textContent = isLast ? "Zobrazit výsledky →" : "Přeskočit →";
-    let secs = 2;
-    countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`;
-    countdownEl.style.display = "";
-    countInt = setInterval(() => { secs--; countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`; if (secs <= 0) clearInterval(countInt); }, 1000);
-    autoTimer = setTimeout(() => nextQuestion(), 2000);
+    document.getElementById("score-correct").textContent = quiz.correct;
+    document.getElementById("score-wrong").textContent = quiz.wrong;
+    document.getElementById("btn-check").style.display = "none";
+    nextQuestion();
+    return;
   } else {
     quiz.wrong++;
     input.classList.add("wrong");

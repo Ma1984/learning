@@ -7,9 +7,9 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;display:flex;flex-direction:column;font-family:system-ui,sans-serif;transition:background .3s,color .3s}
-body.theme-fire{background:linear-gradient(135deg,#ff6b9d,#ffd93d,#6bcb77,#4d96ff);color:#fff}
-body.theme-ocean{background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399);color:#fff}
-body.theme-slate{background:linear-gradient(135deg,#1e293b,#334155);color:#e2e8f0}
+body.theme-fire{background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b);color:#fff}
+body.theme-ocean{background:linear-gradient(135deg,#0f172a,#0369a1,#0ea5e9);color:#fff}
+body.theme-slate{background:#1e293b;color:#e2e8f0}
 body.theme-mono{background:#f8f8f8;color:#111}
 
 #toolbar{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 24px;backdrop-filter:blur(12px)}
@@ -28,8 +28,8 @@ body.theme-mono .tb-theme.active{border-color:#333}
 .tb-sep{width:1px;height:30px;background:rgba(255,255,255,.25);flex-shrink:0}
 body.theme-mono .tb-sep{background:#bbb}
 .tb-label{font-size:14px;font-weight:600;opacity:.8;user-select:none}
-.swatch-fire{background:linear-gradient(135deg,#ff6b9d,#ffd93d,#6bcb77,#4d96ff)}
-.swatch-ocean{background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399)}
+.swatch-fire{background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b)}
+.swatch-ocean{background:linear-gradient(135deg,#0369a1,#0ea5e9)}
 .swatch-slate{background:linear-gradient(135deg,#1e293b,#475569)}
 .swatch-mono{background:linear-gradient(135deg,#d4d4d4,#f8f8f8);border:1px solid #aaa}
 
@@ -80,8 +80,8 @@ body.theme-mono .btn-start{background:#111;color:#fff}
 .cell.empty{background:rgba(255,255,255,.22);color:rgba(255,255,255,.8)}
 body.theme-mono .cell.empty{background:#e5e7eb;color:#555}
 body.theme-slate .cell.empty{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6)}
-.cell.p0{background:#ff4d6d;color:#fff}
-.cell.p1{background:#4361ee;color:#fff}
+.cell.p0{background:#ef4444;color:#fff}
+.cell.p1{background:#3b82f6;color:#fff}
 body.theme-mono .cell.p0{background:#dc2626}
 body.theme-mono .cell.p1{background:#2563eb}
 .cell.taken{cursor:default}
@@ -103,15 +103,6 @@ body.theme-mono .cell.p1{background:#2563eb}
 .win-popup p{font-size:16px;margin-bottom:18px}
 .btn-again{padding:10px 24px;border-radius:12px;border:none;background:#fbbf24;font-size:15px;font-weight:700;cursor:pointer}
 .btn-again:hover{background:#f59e0b}
-.opt-btn.opt-correct{border-color:#16a34a;background:#dcfce7;color:#15803d;font-weight:800}
-.opt-btn.opt-wrong{border-color:#dc2626;background:#fee2e2;color:#dc2626;text-decoration:line-through}
-.opt-btn:disabled{cursor:default}
-.feedback{margin-top:14px;padding:10px 14px;border-radius:10px;font-size:16px;font-weight:700;text-align:center}
-.fb-correct{background:#dcfce7;color:#15803d;border:2px solid #16a34a}
-.fb-wrong{background:#fee2e2;color:#dc2626;border:2px solid #dc2626}
-.countdown{margin-top:10px;font-size:13px;color:#888;text-align:center}
-.skip-btn{display:block;width:100%;margin-top:8px;padding:10px;border-radius:10px;border:none;background:#6366f1;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
-.skip-btn:hover{background:#4f46e5}
 </style>
 </head>
 <body class="theme-fire">
@@ -299,42 +290,8 @@ function selectCell(index){
 
 function answer(index){
   const q=QUESTIONS[currentCell%QUESTIONS.length];
-  const correct=index===q.correctIndex;
-  document.querySelectorAll('.opt-btn').forEach((btn,i)=>{
-    btn.disabled=true;
-    btn.onclick=null;
-    if(i===q.correctIndex)btn.classList.add('opt-correct');
-    else if(i===index&&!correct)btn.classList.add('opt-wrong');
-  });
-  const popup=document.querySelector('.popup');
-  const feedback=document.createElement('div');
-  feedback.className='feedback '+(correct?'fb-correct':'fb-wrong');
-  if(correct){
-    feedback.textContent='✅ Správně! Výborně! 🎉';
-    popup.appendChild(feedback);
-    confetti({particleCount:100,spread:120,origin:{y:0.6},colors:['#ff6b9d','#ffd93d','#6bcb77','#4d96ff']});
-    setTimeout(()=>proceed(true),1500);
-  } else {
-    feedback.textContent='❌ Špatně! Podívej se na správnou odpověď.';
-    popup.appendChild(feedback);
-    const countdownDiv=document.createElement('div');
-    countdownDiv.className='countdown';
-    const skipBtn=document.createElement('button');
-    skipBtn.className='skip-btn';
-    skipBtn.textContent='Pokračovat ▶';
-    let secs=5;
-    countdownDiv.textContent=`Pokračuji automaticky za ${secs}s...`;
-    popup.appendChild(countdownDiv);
-    popup.appendChild(skipBtn);
-    const countInt=setInterval(()=>{secs--;countdownDiv.textContent=`Pokračuji automaticky za ${secs}s...`;if(secs<=0)clearInterval(countInt);},1000);
-    const autoTimer=setTimeout(()=>{clearInterval(countInt);proceed(false);},5000);
-    skipBtn.onclick=()=>{clearTimeout(autoTimer);clearInterval(countInt);proceed(false);};
-  }
-}
-
-function proceed(wasCorrect){
   closePopup();
-  if(wasCorrect){
+  if(index===q.correctIndex){
     state.board[currentCell]=state.currentPlayer;
     state.scores[state.currentPlayer]++;
     if(checkWin(state.currentPlayer)){

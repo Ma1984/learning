@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>🇬🇧 Angličtina – Výuka slovíček</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;font-family:system-ui,sans-serif;background:linear-gradient(135deg,#1e3a5f,#1565c0,#0288d1);color:#fff;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
@@ -71,6 +72,7 @@ h1{font-size:2rem;font-weight:900;text-align:center;margin-bottom:6px;letter-spa
 
 .btn-next{width:100%;padding:13px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-size:1rem;font-weight:800;cursor:pointer;transition:background .15s;display:none}
 .btn-next:hover{background:rgba(255,255,255,.3)}
+.countdown{margin-top:8px;font-size:.85rem;opacity:.7;text-align:center}
 
 /* Results */
 #results{display:none;flex-direction:column;align-items:center;width:100%;max-width:520px;gap:16px}
@@ -158,6 +160,7 @@ h1{font-size:2rem;font-weight:900;text-align:center;margin-bottom:6px;letter-spa
 
   <button class="btn-check" id="btn-check" onclick="checkAnswer()">✔ Zkontrolovat</button>
   <button class="btn-next" id="btn-next" onclick="nextQuestion()">Další slovíčko →</button>
+  <div class="countdown" id="countdown-text" style="display:none"></div>
 </div>
 
 <!-- RESULTS -->
@@ -211,6 +214,8 @@ const TOPICS = [
 
 let selectedMode = "random";
 let quiz = { words: [], index: 0, correct: 0, wrong: 0, answered: false };
+let autoTimer = null;
+let countInt = null;
 
 // --- SETUP ---
 
@@ -298,6 +303,9 @@ function startQuiz() {
 // --- QUIZ ---
 
 function renderQuestion() {
+  clearTimeout(autoTimer);
+  clearInterval(countInt);
+  document.getElementById("countdown-text").style.display = "none";
   const w = quiz.words[quiz.index];
   const total = quiz.words.length;
   const pct = Math.round((quiz.index / total) * 100);
@@ -361,32 +369,42 @@ function checkAnswer() {
   const feedbackBox = document.getElementById("feedback-box");
   const feedbackText = document.getElementById("feedback-text");
   const feedbackDetail = document.getElementById("feedback-detail");
+  const countdownEl = document.getElementById("countdown-text");
+  const btnNext = document.getElementById("btn-next");
+  const isLast = quiz.index === quiz.words.length - 1;
 
   if (isCorrect) {
     quiz.correct++;
     input.classList.add("correct");
     feedbackBox.className = "feedback-box correct";
-    feedbackText.textContent = "✅ Správně!";
+    feedbackText.textContent = "✅ Správně! Výborně! 🎉";
     feedbackDetail.textContent = "";
+    confetti({particleCount:80,spread:100,origin:{y:0.6},colors:['#4ade80','#fbbf24','#60a5fa']});
+    btnNext.textContent = isLast ? "Zobrazit výsledky →" : "Přeskočit →";
+    let secs = 2;
+    countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`;
+    countdownEl.style.display = "";
+    countInt = setInterval(() => { secs--; countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`; if (secs <= 0) clearInterval(countInt); }, 1000);
+    autoTimer = setTimeout(() => nextQuestion(), 2000);
   } else {
     quiz.wrong++;
     input.classList.add("wrong");
     feedbackBox.className = "feedback-box wrong";
     feedbackText.textContent = "❌ Špatně!";
     feedbackDetail.textContent = `Správná odpověď: ${correct}`;
+    btnNext.textContent = isLast ? "Pokračovat ▶" : "Pokračovat ▶";
+    let secs = 5;
+    countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`;
+    countdownEl.style.display = "";
+    countInt = setInterval(() => { secs--; countdownEl.textContent = `Pokračuji automaticky za ${secs}s…`; if (secs <= 0) clearInterval(countInt); }, 1000);
+    autoTimer = setTimeout(() => nextQuestion(), 5000);
   }
 
   feedbackBox.style.display = "";
   document.getElementById("score-correct").textContent = quiz.correct;
   document.getElementById("score-wrong").textContent = quiz.wrong;
   document.getElementById("btn-check").style.display = "none";
-  document.getElementById("btn-next").style.display = "";
-
-  if (quiz.index === quiz.words.length - 1) {
-    document.getElementById("btn-next").textContent = "Zobrazit výsledky →";
-  } else {
-    document.getElementById("btn-next").textContent = "Další slovíčko →";
-  }
+  btnNext.style.display = "";
 }
 
 function handleKey(e) {
@@ -397,6 +415,9 @@ function handleKey(e) {
 }
 
 function nextQuestion() {
+  clearTimeout(autoTimer);
+  clearInterval(countInt);
+  document.getElementById("countdown-text").style.display = "none";
   quiz.index++;
   if (quiz.index >= quiz.words.length) {
     showResults();

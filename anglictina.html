@@ -396,7 +396,7 @@ function checkAnswer() {
     autoTimer = setTimeout(() => nextQuestion(), 5000);
   }
 
-  feedbackBox.style.display = "";
+  feedbackBox.style.display = "block";
   document.getElementById("score-correct").textContent = quiz.correct;
   document.getElementById("score-wrong").textContent = quiz.wrong;
   document.getElementById("btn-check").style.display = "none";

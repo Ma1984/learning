@@ -751,9 +751,9 @@ function checkBreak(){
     }
   }
   // After all 3 defined breaks, trigger every additional 5 minutes
-  if(elapsed>BREAK_INTERVALS_MS[2]){
+  if(elapsed>=BREAK_INTERVALS_MS[2]){
     const extra=Math.floor((elapsed-BREAK_INTERVALS_MS[2])/(5*60*1000));
-    if(extra>0){
+    if(extra>=1){
       const key=3+extra;
       if(!S.breaksDone.has(key)){
         S.breaksDone.add(key);
@@ -769,6 +769,13 @@ function el(tag, cls, text){
   if(cls) e.className=cls;
   if(text!==undefined) e.textContent=text;
   return e;
+}
+
+/* Czech plural for "pokus" */
+function czPluralPokusu(n){
+  if(n===1) return 'pokus';
+  if(n>=2 && n<=4) return 'pokusy';
+  return 'pokusů';
 }
 
 /* ============================================================
@@ -884,8 +891,8 @@ function genNumberLine(){
 }
 
 function genTriangle(){
-  let left,right;
-  do{ left=rnd(1,10); right=rnd(1,10); } while(left+right>20);
+  let left,right,attempts=0;
+  do{ left=rnd(1,10); right=rnd(1,10); attempts++; } while(left+right>20 && attempts<100);
   const top=left+right;
   const vt=rnd(0,2); // 0=missing top, 1=missing left, 2=missing right
   const answer=vt===0?top:vt===1?left:right;
@@ -1048,7 +1055,7 @@ function renderProgressBar(parent){
   const chipNo=el('div','stat-chip');
   chipNo.innerHTML=`<span class="stat-no">❌</span> <span class="stat-no">${S.wrongAttempts}</span>`;
   const chipTot=el('div','stat-chip');
-  chipTot.innerHTML=`<span class="stat-tot">📝 ${S.gameScore+S.wrongAttempts} pokusů</span>`;
+  chipTot.innerHTML=`<span class="stat-tot">📝 ${S.gameScore+S.wrongAttempts} ${czPluralPokusu(S.gameScore+S.wrongAttempts)}</span>`;
   stats.appendChild(chipOk);
   stats.appendChild(chipNo);
   stats.appendChild(chipTot);

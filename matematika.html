@@ -98,6 +98,8 @@ body{
 .ac-blue  {border-color:#3b82f6}
 .ac-teal  {border-color:#0d9488}
 .ac-orange{border-color:#f59e0b}
+.ac-lime  {border-color:#84cc16}
+.ac-indigo{border-color:#6366f1}
 .ac-purple{border-color:#8b5cf6}
 .ac-pink  {border-color:#ec4899}
 
@@ -521,6 +523,133 @@ body{
   box-shadow:0 2px 8px rgba(0,0,0,.07);
 }
 
+/* ===== STATS ROW ===== */
+.stats-row{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  padding:0 20px 8px;
+}
+.stat-chip{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:white;
+  border-radius:999px;
+  padding:6px 16px;
+  font-size:clamp(14px,3vw,17px);
+  font-weight:800;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.stat-ok{color:#059669}
+.stat-no{color:#dc2626}
+.stat-tot{color:#64748b}
+
+/* ===== BREAK SCREEN ===== */
+.break-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  padding:40px 24px 60px;
+  width:100%;
+  text-align:center;
+}
+.break-emoji{font-size:clamp(72px,18vw,100px);animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+.break-title{font-size:clamp(28px,7vw,44px);font-weight:900;color:#dc2626;line-height:1.1}
+.break-task{
+  font-size:clamp(22px,5.5vw,32px);
+  font-weight:800;
+  color:#1e293b;
+  line-height:1.3;
+  background:white;
+  border-radius:22px;
+  padding:22px 28px;
+  box-shadow:0 4px 20px rgba(0,0,0,.1);
+  width:100%;
+  max-width:500px;
+}
+.break-detail{font-size:clamp(15px,3.5vw,18px);color:#64748b;margin-top:4px}
+.break-done-btn{
+  border:none;
+  border-radius:22px;
+  padding:20px 48px;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:800;
+  cursor:pointer;
+  font-family:inherit;
+  background:linear-gradient(135deg,#10b981,#059669);
+  color:white;
+  box-shadow:0 4px 18px rgba(16,185,129,.4);
+  touch-action:manipulation;
+  transition:transform .1s;
+}
+.break-done-btn:active{transform:scale(0.95)}
+
+/* ===== TRIANGLE ===== */
+.tri-container{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;max-width:340px}
+.tri-top-row{display:flex;justify-content:center}
+.tri-svg{width:220px;height:64px;overflow:visible}
+.tri-bot-row{display:flex;justify-content:space-between;width:220px}
+.tri-box{
+  width:clamp(70px,18vw,88px);
+  height:clamp(70px,18vw,88px);
+  border-radius:18px;
+  border:3px solid #cbd5e1;
+  background:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(28px,7vw,40px);
+  font-weight:900;
+  color:#1e293b;
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+  flex-shrink:0;
+}
+.tri-box.tri-q{border-color:#f59e0b;border-style:dashed;background:#fef3c7;color:#d97706}
+.tri-box.tri-ok{border-color:#10b981;border-style:solid;background:#d1fae5;color:#059669}
+.tri-label{
+  font-size:clamp(12px,2.5vw,14px);
+  font-weight:700;
+  color:#94a3b8;
+  text-align:center;
+  margin-top:6px;
+}
+
+/* ===== SNAKE ===== */
+.snake-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  width:100%;
+  overflow-x:auto;
+  padding:8px 4px;
+}
+.snake-box{
+  width:clamp(64px,16vw,82px);
+  height:clamp(64px,16vw,82px);
+  border-radius:18px;
+  border:3px solid #cbd5e1;
+  background:white;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,6vw,36px);
+  font-weight:900;
+  color:#1e293b;
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+  flex-shrink:0;
+}
+.snake-box.snake-q{border-color:#f59e0b;border-style:dashed;background:#fef3c7;color:#d97706}
+.snake-box.snake-ok{border-color:#10b981;border-style:solid;background:#d1fae5;color:#059669}
+.snake-conn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0 6px;
+  flex-shrink:0;
+}
+.snake-op{font-size:clamp(14px,3.2vw,18px);font-weight:800;color:#6366f1;white-space:nowrap;line-height:1}
+.snake-arr{font-size:clamp(16px,4vw,22px);color:#94a3b8;line-height:1;margin-top:2px}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:420px){
   .act-grid{grid-template-columns:1fr}
@@ -543,6 +672,16 @@ const CHAR_MAX_PCT = 97;
 const STAR3_THRESHOLD = 0.85;
 const STAR2_THRESHOLD = 0.60;
 
+/* Break protection: intervals in ms after activity starts */
+const BREAK_INTERVALS_MS = [5*60*1000, 10*60*1000, 15*60*1000];
+const BREAK_EXERCISES = [
+  {emoji:'🏋️', task:'Udělej 5 dřepů!',         detail:'Pokrč kolena, ruce dopředu – 5×'},
+  {emoji:'🐸', task:'10 poskoků na místě!',     detail:'Vyskoč co nejvýš – 10×'},
+  {emoji:'⭐', task:'5 hvězdic!',               detail:'Roztáhni ruce i nohy do hvězdice – 5×'},
+  {emoji:'🤸', task:'5× předklon!',             detail:'Dotkni se prstů na nohách – 5×'},
+  {emoji:'🚶', task:'10 kroků na místě!',       detail:'Zvedej kolena co nejvýš – 10×'},
+];
+
 // Character that marches along the progress bar (changes at milestones)
 function progressChar(n){
   if(n >= TOTAL) return '🏆';
@@ -560,15 +699,18 @@ const MILESTONES = [
 ];
 
 const S = {
-  screen:     'home',   // 'home' | mode name | 'done'
+  screen:     'home',   // 'home' | mode name | 'done' | 'break'
   mode:       null,
   score:      0,        // total cumulative score (shown on home screen)
-  gameScore:  0,        // score for the current 20-problem session
+  gameScore:  0,        // correct answers for the current session
+  wrongAttempts: 0,     // wrong attempts in current session
   streak:     0,
   problem:    null,
   problemNum: 0,        // how many problems answered correctly so far (0..TOTAL)
   locked:     false,    // prevent interaction during animation
   lastWrong:  null,     // last wrong value selected (for brief red flash)
+  playStartTime: null,  // when the first activity of this visit started
+  breaksDone: new Set(),// set of break indices already shown
 };
 
 /* ============================================================
@@ -598,11 +740,42 @@ function celebrate(big){
   }
 }
 
+/* Returns a break exercise object if a break is due, otherwise null */
+function checkBreak(){
+  if(!S.playStartTime) return null;
+  const elapsed = Date.now() - S.playStartTime;
+  for(let i=0;i<BREAK_INTERVALS_MS.length;i++){
+    if(elapsed>=BREAK_INTERVALS_MS[i] && !S.breaksDone.has(i)){
+      S.breaksDone.add(i);
+      return BREAK_EXERCISES[i % BREAK_EXERCISES.length];
+    }
+  }
+  // After all 3 defined breaks, trigger every additional 5 minutes
+  if(elapsed>=BREAK_INTERVALS_MS[2]){
+    const extra=Math.floor((elapsed-BREAK_INTERVALS_MS[2])/(5*60*1000));
+    if(extra>=1){
+      const key=3+extra;
+      if(!S.breaksDone.has(key)){
+        S.breaksDone.add(key);
+        return BREAK_EXERCISES[key % BREAK_EXERCISES.length];
+      }
+    }
+  }
+  return null;
+}
+
 function el(tag, cls, text){
   const e=document.createElement(tag);
   if(cls) e.className=cls;
   if(text!==undefined) e.textContent=text;
   return e;
+}
+
+/* Czech plural for "pokus" */
+function czPluralPokusu(n){
+  if(n===1) return 'pokus';
+  if(n>=2 && n<=4) return 'pokusy';
+  return 'pokusů';
 }
 
 /* ============================================================
@@ -717,6 +890,33 @@ function genNumberLine(){
   return {type:'nl', target, answer:target};
 }
 
+function genTriangle(){
+  let left,right,attempts=0;
+  do{ left=rnd(1,10); right=rnd(1,10); attempts++; } while(left+right>20 && attempts<100);
+  const top=left+right;
+  const vt=rnd(0,2); // 0=missing top, 1=missing left, 2=missing right
+  const answer=vt===0?top:vt===1?left:right;
+  return {type:'triangle', left, right, top, vt, answer};
+}
+
+function genSnake(){
+  let a,d1,b,op1,d2,c,op2;
+  let attempts=0;
+  do{
+    attempts++;
+    a=rnd(2,15);
+    op1=Math.random()<.5?'+':'-';
+    d1=rnd(1,8);
+    b=op1==='+'?a+d1:a-d1;
+    op2=Math.random()<.5?'+':'-';
+    d2=rnd(1,8);
+    c=op2==='+'?b+d2:b-d2;
+  } while((b<1||b>20||c<1||c>20) && attempts<200);
+  const vt=rnd(0,2); // 0=hide a, 1=hide b, 2=hide c
+  const answer=vt===0?a:vt===1?b:c;
+  return {type:'snake', a, b, c, op1, op2, d1, d2, vt, answer};
+}
+
 function genProblem(mode){
   const gen = {
     addition:   genAddition,
@@ -725,6 +925,8 @@ function genProblem(mode){
     missing:    genMissing,
     compare:    genCompare,
     numberline: genNumberLine,
+    triangle:   genTriangle,
+    snake:      genSnake,
   };
   return gen[mode]();
 }
@@ -746,7 +948,11 @@ function handleNumberAnswer(val){
     render(); // show green
     setTimeout(()=>{
       S.locked=false;
-      if(S.problemNum>=TOTAL){
+      const breakEx = checkBreak();
+      if(breakEx){
+        S.screen='break';
+        S.pendingBreak=breakEx;
+      } else if(S.problemNum>=TOTAL){
         S.screen='done';
       } else {
         S.problem=genProblem(S.mode);
@@ -756,6 +962,7 @@ function handleNumberAnswer(val){
   } else {
     S.locked=true;
     S.streak=0;
+    S.wrongAttempts++;
     S.lastWrong=val;
     render(); // show red on wrong number
     setTimeout(()=>{
@@ -780,7 +987,11 @@ function handleCompareAnswer(sym){
     render();
     setTimeout(()=>{
       S.locked=false;
-      if(S.problemNum>=TOTAL){
+      const breakEx = checkBreak();
+      if(breakEx){
+        S.screen='break';
+        S.pendingBreak=breakEx;
+      } else if(S.problemNum>=TOTAL){
         S.screen='done';
       } else {
         S.problem=genProblem(S.mode);
@@ -790,6 +1001,7 @@ function handleCompareAnswer(sym){
   } else {
     S.locked=true;
     S.streak=0;
+    S.wrongAttempts++;
     S.lastWrong=sym;
     render();
     setTimeout(()=>{
@@ -805,7 +1017,7 @@ function handleCompareAnswer(sym){
 ============================================================ */
 function renderProgressBar(parent){
   const sec=el('div','progress-section');
-  const lbl=el('div','progress-label',`Správně: ${S.problemNum} / ${TOTAL}`);
+  const lbl=el('div','progress-label',`Příklady: ${S.problemNum} / ${TOTAL}`);
   sec.appendChild(lbl);
 
   const trackWrap=el('div','progress-track-wrap');
@@ -828,7 +1040,6 @@ function renderProgressBar(parent){
   // Walking character
   const charWrap=el('div','char-wrap');
   const pct=Math.min(100, S.problemNum/TOTAL*100);
-  // Keep character at least CHAR_MIN_PCT in and at most CHAR_MAX_PCT so it doesn't clip
   charWrap.style.left=Math.max(CHAR_MIN_PCT,Math.min(CHAR_MAX_PCT,pct))+'%';
   const icon=el('span','char-icon',progressChar(S.problemNum));
   charWrap.appendChild(icon);
@@ -836,6 +1047,19 @@ function renderProgressBar(parent){
 
   sec.appendChild(trackWrap);
   parent.appendChild(sec);
+
+  // Stats chips row
+  const stats=el('div','stats-row');
+  const chipOk=el('div','stat-chip');
+  chipOk.innerHTML=`<span class="stat-ok">✅</span> <span class="stat-ok">${S.gameScore}</span>`;
+  const chipNo=el('div','stat-chip');
+  chipNo.innerHTML=`<span class="stat-no">❌</span> <span class="stat-no">${S.wrongAttempts}</span>`;
+  const chipTot=el('div','stat-chip');
+  chipTot.innerHTML=`<span class="stat-tot">📝 ${S.gameScore+S.wrongAttempts} ${czPluralPokusu(S.gameScore+S.wrongAttempts)}</span>`;
+  stats.appendChild(chipOk);
+  stats.appendChild(chipNo);
+  stats.appendChild(chipTot);
+  parent.appendChild(stats);
 }
 
 /* ============================================================
@@ -880,6 +1104,7 @@ function render(){
   root.innerHTML='';
   if(S.screen==='home')        renderHome(root);
   else if(S.screen==='done')   renderDone(root);
+  else if(S.screen==='break')  renderBreak(root);
   else                         renderActivity(root);
 }
 
@@ -900,6 +1125,8 @@ function renderHome(root){
     {mode:'mixed',       icon:'➕➖',name:'Sčítání + Odčítání', hint:'oba druhy dohromady',      cls:'ac-teal'},
     {mode:'missing',     icon:'❓', name:'Chybějící číslo',     hint:'5 + ? = 8',               cls:'ac-purple'},
     {mode:'compare',     icon:'⚖️', name:'Porovnávání',         hint:'více • méně • stejně',     cls:'ac-orange'},
+    {mode:'triangle',    icon:'🔺', name:'Trojúhelník',         hint:'levé + pravé = vrchol',    cls:'ac-lime'},
+    {mode:'snake',       icon:'🐍', name:'Had',                 hint:'počítej podél hada',       cls:'ac-indigo'},
     {mode:'numberline',  icon:'📏', name:'Číselná osa',         hint:'kde je číslo?',            cls:'ac-pink full'},
   ].forEach(a=>{
     const card=el('div',`ac ${a.cls}`);
@@ -907,10 +1134,12 @@ function renderHome(root){
       `<div class="ac-name">${a.name}</div>`+
       `<div class="ac-hint">${a.hint}</div>`;
     card.addEventListener('click',()=>{
+      if(!S.playStartTime) S.playStartTime=Date.now();
       S.screen=a.mode;
       S.mode=a.mode;
       S.problemNum=0;
       S.gameScore=0;
+      S.wrongAttempts=0;
       S.locked=false;
       S.lastWrong=null;
       S.streak=0;
@@ -950,6 +1179,10 @@ function renderActivity(root){
     renderCompare(content, p);
   } else if(p.type==='nl'){
     renderNL(content, p);
+  } else if(p.type==='triangle'){
+    renderTriangle(content, p);
+  } else if(p.type==='snake'){
+    renderSnake(content, p);
   }
 }
 
@@ -1071,14 +1304,13 @@ function renderCompare(content, p){
   const card=el('div','pcard');
   const row=el('div','cmp-row');
 
-  function side(n, col){
+  function side(n){
     const s=el('div','cmp-side');
     s.appendChild(el('div','cmp-num',n));
-    s.appendChild(makeDotsVisual(n,col,col));
     return s;
   }
 
-  row.appendChild(side(p.a,'dot-r'));
+  row.appendChild(side(p.a));
 
   const mid=el('div','cmp-mid');
   if(S.locked && S.lastWrong===null){
@@ -1091,7 +1323,7 @@ function renderCompare(content, p){
     mid.textContent='?';
   }
   row.appendChild(mid);
-  row.appendChild(side(p.b,'dot-b'));
+  row.appendChild(side(p.b));
   card.appendChild(row);
 
   if(S.locked && S.lastWrong!==null){
@@ -1151,14 +1383,33 @@ function renderNL(content, p){
 /* ----- COMPLETION SCREEN ----- */
 function renderDone(root){
   const wrap=el('div','done-wrap');
-  const pct=S.gameScore/TOTAL;
-  const emoji = pct>=.9?'🏆':pct>=.7?'🎉':pct>=.5?'😊':'💪';
+  const w=S.wrongAttempts;
+  const emoji = w===0?'🏆':w<=3?'🎉':w<=7?'😊':'💪';
   wrap.appendChild(el('div','done-emoji',emoji));
   wrap.appendChild(el('div','done-title','Hotovo!'));
-  wrap.appendChild(el('div','done-score',`Správně: ${S.gameScore} z ${TOTAL}`));
 
-  const stars = pct>=STAR3_THRESHOLD?'⭐⭐⭐':pct>=STAR2_THRESHOLD?'⭐⭐':'⭐';
+  const scoreEl=el('div','done-score');
+  scoreEl.innerHTML=`✅ Správně: <strong>${S.gameScore}</strong> z ${TOTAL}`;
+  if(w>0) scoreEl.innerHTML+=`&nbsp;&nbsp;❌ Chyby: <strong>${w}</strong>`;
+  wrap.appendChild(scoreEl);
+
+  // Stars based on wrong attempts – motivational but honest
+  let stars, starMsg;
+  if(w===0){
+    stars='⭐⭐⭐'; starMsg='Perfektní – ani jedna chyba! 🥇';
+  } else if(w<=3){
+    stars='⭐⭐⭐'; starMsg='Výborně! Jen pár zaváhání 👏';
+  } else if(w<=7){
+    stars='⭐⭐'; starMsg='Moc dobře! Příště to půjde ještě líp 💪';
+  } else {
+    stars='⭐'; starMsg='Dobrá práce! Cvičíme dál a bude to lepší 🌱';
+  }
   wrap.appendChild(el('div','done-stars',stars));
+  const msgEl=el('div','mode-lbl',starMsg);
+  msgEl.style.fontSize='clamp(16px,3.5vw,20px)';
+  wrap.appendChild(msgEl);
+
+  if(w===0) celebrate(true);
 
   const btns=el('div','done-btns');
 
@@ -1167,6 +1418,7 @@ function renderDone(root){
     S.screen=S.mode;
     S.problemNum=0;
     S.gameScore=0;
+    S.wrongAttempts=0;
     S.streak=0;
     S.locked=false;
     S.lastWrong=null;
@@ -1181,6 +1433,160 @@ function renderDone(root){
 
   wrap.appendChild(btns);
   root.appendChild(wrap);
+}
+
+/* ----- BREAK SCREEN ----- */
+function renderBreak(root){
+  const ex=S.pendingBreak || BREAK_EXERCISES[0];
+  const wrap=el('div','break-wrap');
+  wrap.appendChild(el('div','break-emoji',ex.emoji));
+  wrap.appendChild(el('div','break-title','Čas na pohyb! 🏃'));
+  const task=el('div','break-task');
+  task.innerHTML=`<div>${ex.task}</div><div class="break-detail">${ex.detail}</div>`;
+  wrap.appendChild(task);
+  wrap.appendChild(el('div','mode-lbl','Udělej cvičení a pak pokračuj!'));
+  const btn=el('button','break-done-btn','✅ Hotovo, pokračuji!');
+  btn.addEventListener('click',()=>{
+    S.pendingBreak=null;
+    if(S.problemNum>=TOTAL){
+      S.screen='done';
+    } else {
+      S.screen=S.mode;
+      S.problem=genProblem(S.mode);
+    }
+    render();
+  });
+  wrap.appendChild(btn);
+  root.appendChild(wrap);
+}
+
+/* ----- TRIANGLE ----- */
+function renderTriangle(content, p){
+  content.appendChild(el('div','mode-lbl','🔺 Součtový trojúhelník'));
+
+  const card=el('div','pcard');
+
+  // Build the visual triangle
+  const triContainer=el('div','tri-container');
+
+  function triBox(val, isMissing){
+    const box=el('div','tri-box');
+    if(isMissing){
+      if(S.locked && S.lastWrong===null){
+        box.classList.add('tri-ok');
+        box.textContent=p.answer;
+      } else {
+        box.classList.add('tri-q');
+        box.textContent='?';
+      }
+    } else {
+      box.textContent=val;
+    }
+    return box;
+  }
+
+  // Top row
+  const topRow=el('div','tri-top-row');
+  topRow.appendChild(triBox(p.top, p.vt===0));
+  triContainer.appendChild(topRow);
+
+  // SVG connecting lines
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('class','tri-svg');
+  svg.setAttribute('viewBox','0 0 220 64');
+  svg.setAttribute('preserveAspectRatio','none');
+  const l1=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l1.setAttribute('x1','110');l1.setAttribute('y1','0');
+  l1.setAttribute('x2','20'); l1.setAttribute('y2','64');
+  l1.setAttribute('stroke','#cbd5e1');l1.setAttribute('stroke-width','3');
+  l1.setAttribute('stroke-linecap','round');
+  const l2=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l2.setAttribute('x1','110');l2.setAttribute('y1','0');
+  l2.setAttribute('x2','200');l2.setAttribute('y2','64');
+  l2.setAttribute('stroke','#cbd5e1');l2.setAttribute('stroke-width','3');
+  l2.setAttribute('stroke-linecap','round');
+  svg.appendChild(l1);svg.appendChild(l2);
+  triContainer.appendChild(svg);
+
+  // Bottom row
+  const botRow=el('div','tri-bot-row');
+  botRow.appendChild(triBox(p.left, p.vt===1));
+  botRow.appendChild(triBox(p.right, p.vt===2));
+  triContainer.appendChild(botRow);
+
+  triContainer.appendChild(el('div','tri-label','Levé + Pravé = Vrchol'));
+
+  card.appendChild(triContainer);
+
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!','🥳 Bravo!','👏 Super!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
+  }
+
+  content.appendChild(card);
+
+  const hintLbl=el('div','mode-lbl');
+  hintLbl.style.marginTop='-4px';
+  hintLbl.textContent='👇 Klikni na správné číslo';
+  content.appendChild(hintLbl);
+
+  renderNumberLine(content, p.answer);
+}
+
+/* ----- SNAKE ----- */
+function renderSnake(content, p){
+  content.appendChild(el('div','mode-lbl','🐍 Součtový had'));
+
+  const card=el('div','pcard');
+
+  function snakeBox(val, isMissing){
+    const box=el('div','snake-box');
+    if(isMissing){
+      if(S.locked && S.lastWrong===null){
+        box.classList.add('snake-ok');
+        box.textContent=p.answer;
+      } else {
+        box.classList.add('snake-q');
+        box.textContent='?';
+      }
+    } else {
+      box.textContent=val;
+    }
+    return box;
+  }
+
+  function snakeConn(op, delta){
+    const conn=el('div','snake-conn');
+    conn.appendChild(el('span','snake-op',`${op}${delta}`));
+    conn.appendChild(el('span','snake-arr','→'));
+    return conn;
+  }
+
+  const snakeWrap=el('div','snake-wrap');
+  snakeWrap.appendChild(snakeBox(p.a, p.vt===0));
+  snakeWrap.appendChild(snakeConn(p.op1, p.d1));
+  snakeWrap.appendChild(snakeBox(p.b, p.vt===1));
+  snakeWrap.appendChild(snakeConn(p.op2, p.d2));
+  snakeWrap.appendChild(snakeBox(p.c, p.vt===2));
+  card.appendChild(snakeWrap);
+
+  if(S.locked && S.lastWrong!==null){
+    card.appendChild(el('div','feedback-inline fi-no','❌ Zkus znovu!'));
+  } else if(S.locked && S.lastWrong===null){
+    const OK_MSGS=['🎉 Správně!','⭐ Výborně!','🌟 Skvělé!','🎯 Přesně!','🥳 Bravo!','👏 Super!'];
+    card.appendChild(el('div','feedback-inline fi-ok',OK_MSGS[Math.floor(Math.random()*OK_MSGS.length)]));
+  }
+
+  content.appendChild(card);
+
+  const hintLbl=el('div','mode-lbl');
+  hintLbl.style.marginTop='-4px';
+  hintLbl.textContent='👇 Klikni na správné číslo';
+  content.appendChild(hintLbl);
+
+  renderNumberLine(content, p.answer);
 }
 
 /* ============================================================

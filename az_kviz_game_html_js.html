@@ -159,6 +159,8 @@ const QUESTIONS = [
 ];
 
 QUESTIONS.forEach(q=>{const c=q.options[q.correctIndex];q.options=q.options.sort(()=>Math.random()-.5);q.correctIndex=q.options.indexOf(c);});
+// sort questions to make sure different ones appear on each cell each game
+QUESTIONS.sort(()=>Math.random()-.5);
 
 const FUNNY_NAMES=["🧠 Brainy Banana","🦄 Unicorn Teacher","🤖 Grammar Bot 9000","🐸 Sir Frogington","🔥 Verb Slayer","👽 Alien Student","🍕 Pizza Master","🦸 Super Student","🎩 Lord Tense","🐉 Dragon Grammarian","🧙 Wizard of Words","🦊 Foxy Linguist"];
 const SIZE=7;

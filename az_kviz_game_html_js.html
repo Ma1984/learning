@@ -119,7 +119,45 @@ body.theme-mono .cell.p1{background:#2563eb}
 </div>
 
 <script>
-const QUESTIONS=[{question:"She ___ to school every day.",options:["goes","is going","go"],correctIndex:0},{question:"They ___ football right now.",options:["play","are playing","plooting"],correctIndex:1},{question:"I usually ___ coffee in the morning.",options:["drink","am drinking","drunkify"],correctIndex:0},{question:"He ___ TV at the moment.",options:["watches","is watching","watchify"],correctIndex:1},{question:"We ___ dinner now.",options:["eat","are eating","eatoo"],correctIndex:1},{question:"She ___ sometimes late for work.",options:["is coming","comes","come"],correctIndex:1},{question:"They ___ never watch horror movies.",options:["do","are","does"],correctIndex:0},{question:"I ___ right now, can you call me later?",options:["am talking","talk","talks"],correctIndex:0},{question:"He often ___ in the morning.",options:["jogs","is jogging","jog"],correctIndex:0},{question:"We ___ to the gym on Mondays.",options:["go","is going","goes"],correctIndex:0},{question:"You ___ always forget your keys!",options:["does","do","are doing"],correctIndex:1},{question:"It ___ a lot in spring.",options:["rains","is raining","rainify"],correctIndex:0},{question:"She ___ a book right now.",options:["reads","is reading","readify"],correctIndex:1},{question:"Do they ___ breakfast every morning?",options:["have","are having","has"],correctIndex:0},{question:"He ___ his homework at the moment.",options:["is doing","does","do"],correctIndex:0},{question:"I ___ usually take a nap after lunch.",options:["am taking","take","takes"],correctIndex:1},{question:"They ___ right now.",options:["are dancing","dance","dances"],correctIndex:0},{question:"He ___ always forget his bag.",options:["does","do","is"],correctIndex:0},{question:"You ___ sometimes too quickly.",options:["drive","drives","are driving"],correctIndex:0},{question:"It ___ snow in winter.",options:["snows","is snowing","snow"],correctIndex:0},{question:"Are you ___ a new project?",options:["working on","work","works"],correctIndex:0},{question:"They ___ a meeting right now.",options:["are having","have","has"],correctIndex:0},{question:"I ___ a shower at the moment.",options:["am having","have","has"],correctIndex:0},{question:"We ___ right now.",options:["are walking","walk","walks"],correctIndex:0},{question:"They ___ usually play cards.",options:["plays","play","are playing"],correctIndex:1},{question:"She ___ right now.",options:["is painting","paints","paint"],correctIndex:0},{question:"It ___ right now.",options:["is raining","rains","rain"],correctIndex:0},{question:"I ___ never forget my homework.",options:["do","does","am"],correctIndex:0},{question:"They ___ right now.",options:["are playing","play","plays"],correctIndex:0}];
+
+
+const QUESTIONS = [
+  // --- Present Simple ---
+  { question: "She ___ to school every day.",          options: ["goes", "is going", "go"],          correctIndex: 0 },
+  { question: "I usually ___ coffee in the morning.",  options: ["drink", "am drinking", "drinking"], correctIndex: 0 },
+  { question: "She sometimes ___ to work by bus.",      options: ["is going", "goes", "go"],       correctIndex: 1 },
+  { question: "They never ___ horror movies.",   options: ["watch", "watching", "are watching"],                correctIndex: 0 },
+  { question: "He often ___ jogging in the morning.",          options: ["gos", "is going", "goes"],        correctIndex: 2 },
+  { question: "We ___ to the gym on Mondays.",         options: ["go", "is going", "goes"],           correctIndex: 0 },
+  { question: "You always ___  your keys!",      options: ["forgeting", "forgets", "forget"],          correctIndex: 2 },
+  { question: "It ___ a lot in spring.",               options: ["rains", "is raining", "rainify"],   correctIndex: 0 },
+  { question: "___ they ___ breakfast every morning?",  options: ["do/have", "are/having", "has/have"],        correctIndex: 0 },
+  { question: "It ___ snow in winter.",                options: ["snows", "is snowing", "snow"],      correctIndex: 0 },
+
+  // --- Present Continuous ---
+  { question: "They ___ football right now.",          options: ["play", "are playing", "plooting"],  correctIndex: 1 },
+  { question: "He ___ TV at the moment.",              options: ["watches", "is watching", "watchify"], correctIndex: 1 },
+  { question: "We ___ dinner now.",                    options: ["eat", "are eating", "eatoo"],       correctIndex: 1 },
+  { question: "I ___ right now, can you call me later?", options: ["am talking", "talk", "talks"],   correctIndex: 0 },
+  { question: "She ___ a book right now.",             options: ["reads", "is reading", "readify"],   correctIndex: 1 },
+  { question: "He ___ his homework at the moment.",    options: ["is doing", "does", "do"],           correctIndex: 0 },
+  { question: "I usually ___ a nap after lunch.", options: ["am taking", "take", "takes"],       correctIndex: 1 },
+  { question: "They ___ right now.",                   options: ["are dancing", "dance", "dances"],   correctIndex: 0 },
+  { question: "___ you ___ on a new project?",            options: ["are/working", "do/work", "does/work"],      correctIndex: 0 },
+  { question: "They ___ dinner right now.",         options: ["are having", "have", "has"],        correctIndex: 0 },
+  { question: "I ___ a shower at the moment.",         options: ["am taking", "take", "takes"],         correctIndex: 0 },
+  { question: "We ___ right now.",                     options: ["are walking", "walk", "walks"],     correctIndex: 0 },
+  { question: "She ___ right now.",                    options: ["is painting", "paints", "paint"],   correctIndex: 0 },
+  { question: "It ___ right now.",                     options: ["is raining", "rains", "rain"],      correctIndex: 0 },
+
+  // --- Mixed / Tricky ---
+  { question: "He always ___ his bag.",         options: ["forgets", "forget", "forgetting"],                 correctIndex: 0 },
+  { question: "You sometimes ___ too quickly.",        options: ["drive", "drives", "are driving"],   correctIndex: 0 },
+  { question: "They usually ___ cards.",          options: ["plays", "play", "are playing"],     correctIndex: 1 },
+  { question: "I never ___ my homework.",       options: ["forget", "am forgetting", "forgets"],                 correctIndex: 0 },
+  { question: "They ___ right now.",                   options: ["are playing", "play", "plays"],     correctIndex: 0 },
+];
+
 QUESTIONS.forEach(q=>{const c=q.options[q.correctIndex];q.options=q.options.sort(()=>Math.random()-.5);q.correctIndex=q.options.indexOf(c);});
 
 const FUNNY_NAMES=["🧠 Brainy Banana","🦄 Unicorn Teacher","🤖 Grammar Bot 9000","🐸 Sir Frogington","🔥 Verb Slayer","👽 Alien Student","🍕 Pizza Master","🦸 Super Student","🎩 Lord Tense","🐉 Dragon Grammarian","🧙 Wizard of Words","🦊 Foxy Linguist"];
